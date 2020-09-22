@@ -12,6 +12,10 @@
                     <option value="FOOT">末端端點</option>
                 </select>
             </div>
+            <div class="form-group col-md-6">
+                <label for="inputElement">元件群組名稱</label>
+                <input type="text" class="form-control" id="inputGroupName">
+            </div>
         </div>
 
         <div class="row">
@@ -22,7 +26,7 @@
             <div class="form-group col-md-6">
                 <label for="inputAttribute">元件屬性</label>
                 <select id="inputAttribute" class="form-control">
-                    <option selected>請先選擇起始元件</option>
+                    <option selected></option>
                 </select>
             </div>
         </div>
@@ -34,6 +38,8 @@
                     <option value="StartWith">StartWith</option>
                     <option value="EndWith">EndWith</option>
                     <option value="Content">Content</option>
+                    <option value="Between">Between</option>
+                    <option value="Equal">Equal</option>
                 </select>
             </div>
             <div class="form-group col-md-6">
@@ -69,6 +75,7 @@
                         <th class="text-center">inputAttribute</th>
                         <th class="text-center">inputMethod</th>
                         <th class="text-center">inputMethodText</th>
+                        <th class="text-center">HeadGroupName</th>
                         <th class="text-center">Remove Row</th>
                         <th class="text-center">Add SubRow</th>
                     </tr>
@@ -86,6 +93,7 @@
                 <thead>
                     <tr>
                         <th class="text-center">inputOperator</th>
+                        <th class="text-center">HeadGroupName</th>
                         <th class="text-center">inputElement</th>
                         <th class="text-center">inputAttribute</th>
                         <th class="text-center">inputMethod</th>
@@ -105,27 +113,34 @@
     <script>
         var headRowIdTitle = 'oForm_tableRules_headRow_';
         var footRowIdTitle = 'oForm_tableRules_footRow_';
+        const dicHeadGroupName = [];
 
         $(document).ready(function () {
-            ChangeAttributeReplaceWith();
-
             //row expand key word => data-toggle="collapse", <a data-toggle="collapse" href="#collapseExample">+</a>
+
+            ChangeAttributeReplaceWith();            
             var headRowIndex = 0;
             var footRowIndex = 0;
 
             $('#btnAddRow').on('click', function () {                
                 var type = $('#inputType').val();
-
                 if (type == "HEAD") {
+                    debugger;
                     headRowIndex++;
                     var trId = headRowIdTitle + headRowIndex
-                    $('#tbodyHead').append('<tr id=' + trId + '><td class="text-center">' + $("#inputOperator").val() + '</td><td class="text-center">' + $("#inputElement").val() + '</td><td class="text-center">' + $("#inputAttribute").val() + '</td><td class="text-center">' + $("#inputMethod").val() + '</td><td class="text-center">' + $("#inputMethodText").val() + '</td><td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button><td class="text-center"><button class="btn btn-info addSubRow" type="button">AddSubRow</button></td></tr>');
+                    $('#tbodyHead').append('<tr id=' + trId + '><td class="text-center">' + $("#inputOperator").val() + '</td><td class="text-center">' + $("#inputElement").val() + '</td><td class="text-center">' + $("#inputAttribute").val() + '</td><td class="text-center">' + $("#inputMethod").val() + '</td><td class="text-center">' + $("#inputMethodText").val() + '</td><td class="text-center GroupName">' + $("#inputGroupName").val() + '</td><td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button><td class="text-center"><button class="btn btn-info addSubRow" type="button">AddSubRow</button></td></tr>');
+                    if ($("#inputGroupName").val().trim().length > 0) {
+                        dicHeadGroupName.push({
+                            key: $("#inputGroupName").val(),
+                            value: $("#inputGroupName").val()
+                        });
+                    }
                     setFirstTd(headRowIdTitle);   
                 }
                 else {
                     footRowIndex++;
                     var trId = footRowIdTitle + footRowIndex
-                    $('#tbodyFoot').append('<tr id=' + trId + '><td class="text-center">' + $("#inputOperator").val() + '</td><td class="text-center">' + $("#inputElement").val() + '</td><td class="text-center">' + $("#inputAttribute").val() + '</td><td class="text-center">' + $("#inputMethod").val() + '</td><td class="text-center">' + $("#inputMethodText").val() + '</td><td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button><td class="text-center"><button class="btn btn-info addSubRow" type="button">AddSubRow</button></td></tr>');
+                    $('#tbodyFoot').append('<tr id=' + trId + '><td class="text-center">' + $("#inputOperator").val() + '</td><td class="text-center tdSelGroupName">' + getHeadGroupName() + '</td><td class="text-center">' + $("#inputElement").val() + '</td><td class="text-center">' + $("#inputAttribute").val() + '</td><td class="text-center">' + $("#inputMethod").val() + '</td><td class="text-center">' + $("#inputMethodText").val() + '</td><td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button><td class="text-center"><button class="btn btn-info addSubRow" type="button">AddSubRow</button></td></tr>');
                     setFirstTd(footRowIdTitle);
                 }                
             });
@@ -153,11 +168,19 @@
                         $(this).attr('id', `${rowIdTitle}${dig - 1}`);
                     });
 
+                    debugger;
+                    var groupName = $(this).closest('tr').find('td[class*="GroupName"]').html();
+                    if (groupName.length > 0) {
+                        $('#tbodyFoot tbody tr').each(function(){
+                            alert('aaa~');
+                        });
+                    }
                     $(this).closest('tr').remove();
 
                     headRowIndex--;
                 }
-                else {
+                else
+                {//移除次Row
                     var id = $(this).closest('tr').attr('id');
                     var idSplit = id.split('_');
                     $(this).closest('tr').remove();
@@ -170,8 +193,7 @@
             });
             $('#tbodyHead').on('click', '.addSubRow', function () {
                 var parentRowId = $(this).closest('tr').attr('id');
-
-                $('#' + parentRowId).after('<tr class = "subrow" id=' + parentRowId + '_SubRow' + '><td class="text-center">' + $("#inputOperator").val() + '</td><td class="text-center">' + $("#inputElement").val() + '</td><td class="text-center">' + $("#inputAttribute").val() + '</td><td class="text-center">' + $("#inputMethod").val() + '</td><td class="text-center">' + $("#inputMethodText").val() + '</td><td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button></td><td></td></tr>');
+                $('#' + parentRowId).after('<tr class = "subrow" id=' + parentRowId + '_SubRow' + '><td class="text-center">' + $("#inputOperator").val() + '</td><td class="text-center">' + $("#inputElement").val() + '</td><td class="text-center">' + $("#inputAttribute").val() + '</td><td class="text-center">' + $("#inputMethod").val() + '</td><td class="text-center">' + $("#inputMethodText").val() + '</td><td></td><td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button></td><td></td></tr>');
                 renameSubRow(parentRowId)
             });
             
@@ -215,11 +237,13 @@
             $('#tbodyFoot').on('click', '.addSubRow', function () {
                 var parentRowId = $(this).closest('tr').attr('id');
 
-                $('#' + parentRowId).after('<tr class = "subrow" id=' + parentRowId + '_SubRow' + '><td class="text-center">' + $("#inputOperator").val() + '</td><td class="text-center">' + $("#inputElement").val() + '</td><td class="text-center">' + $("#inputAttribute").val() + '</td><td class="text-center">' + $("#inputMethod").val() + '</td><td class="text-center">' + $("#inputMethodText").val() + '</td><td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button></td><td></td></tr>');
+                $('#' + parentRowId).after('<tr class = "subrow" id=' + parentRowId + '_SubRow' + '><td class="text-center">' + $("#inputOperator").val() + '</td><td></td><td class="text-center">' + $("#inputElement").val() + '</td><td class="text-center">' + $("#inputAttribute").val() + '</td><td class="text-center">' + $("#inputMethod").val() + '</td><td class="text-center">' + $("#inputMethodText").val() + '</td><td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button></td><td></td></tr>');
                 renameSubRow(parentRowId)
             });
-
-
+            $('#tbodyFoot').on('change', '.selGroupName', function () {
+                var sel = $(this).closest('tr').find('td[class*="tdSelGroupName"] select');
+                sel.attr("headGroupName", sel.val());
+            })
         })
 
         function ChangeAttributeReplaceWith() {
@@ -249,7 +273,7 @@
 
         function setFirstTd(title) {
             //Table的第一個Row的運算子要拿掉
-            $("#" + title + "_1").find("td:first").html("");
+            $("#" + title + "1").find("td:first").html("");
         }
 
         function getSubRow(parentRowId) {
@@ -272,6 +296,29 @@
                 idx++;
                 $(this).attr('id', `${newParentRowId}_${idx}`);
             });
+        }
+
+        function getHeadGroupName() {
+            var res = '';
+            if (dicHeadGroupName.length > 0) {
+                res += '<select class="selGroupName">'
+                for (var i = 0; i < dicHeadGroupName.length; i++) {
+                    res += '<option>' + dicHeadGroupName[i].value + '</Option >'
+                }
+                res += '</select>'
+            }
+            return res;
+        }
+
+        function removeHeadGroupName(groupName) {
+            var res = '';
+            if (dicHeadGroupName.length > 0) {
+                for (var i = 0; i < dicHeadGroupName.length; i++) {
+                    if (dicHeadGroupName[i].value == groupName) {
+                        dicHeadGroupName.splice(i, 1)
+                    }
+                }
+            }
         }
     </script>
 }
