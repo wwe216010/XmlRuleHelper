@@ -3,35 +3,53 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 
-    <form>
-        <div class="form-group">
-            <label for="inputElement">起始元件</label>
-            @Html.DropDownList("inputElement", (IEnumerable<SelectListItem>)ViewData["inputElement"], new { @class = "form-control" })
+    <form class="container pt-4">
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="inputElement">元件類別</label>
+                <select id="inputType" class="form-control">
+                    <option value="HEAD">源頭</option>
+                    <option value="FOOT">末端端點</option>
+                </select>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="inputAttribute">元件屬性</label>
-            <select id="inputAttribute" class="form-control">
-                <option selected>請先選擇起始元件</option>
-            </select>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="inputElement">元件</label>
+                @Html.DropDownList("inputElement", (IEnumerable<SelectListItem>)ViewData["inputElement"], new { @class = "form-control" })
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputAttribute">元件屬性</label>
+                <select id="inputAttribute" class="form-control">
+                    <option selected>請先選擇起始元件</option>
+                </select>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="inputMethod">篩選條件</label>
-            <select id="inputMethod" class="form-control">
-                <option value="StartWith">StartWith</option>
-                <option value="EndWith">EndWith</option>
-                <option value="Content">Content</option>
-            </select>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="inputMethod">篩選條件</label>
+                <select id="inputMethod" class="form-control">
+                    <option value="StartWith">StartWith</option>
+                    <option value="EndWith">EndWith</option>
+                    <option value="Content">Content</option>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputMethodText">篩選條件參數</label>
+                <input type="text" class="form-control" id="inputMethodText">
+            </div>
         </div>
-        <div class="form-group">
-            <label for="inputMethodText">篩選條件參數</label>
-            <input type="text" class="form-control" id="inputMethodText">
-        </div>
-        <div class="form-group">
-            <label for="inputOperator">運算子</label>
-            <select id="inputOperator" class="form-control">
-                <option value="And">And</option>
-                <option value="Or">Or</option>
-            </select>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="inputOperator">運算子</label>
+                <select id="inputOperator" class="form-control">
+                    <option value="And">And</option>
+                    <option value="Or">Or</option>
+                </select>
+            </div>
         </div>
 
 
@@ -39,6 +57,8 @@
         <button type="submit" class="btn btn-primary">Sign in</button>
     </form>
 
+    <br>
+    <h>HEAD TABLE</h>
     <div class="container pt-4">
         <div class="table-responsive">
             <table class="table table-bordered">
@@ -50,83 +70,163 @@
                         <th class="text-center">inputMethod</th>
                         <th class="text-center">inputMethodText</th>
                         <th class="text-center">Remove Row</th>
+                        <th class="text-center">Add SubRow</th>
                     </tr>
                 </thead>
-                <tbody id="tbody">
+                <tbody id="tbodyHead">
                 </tbody>
             </table>
         </div>
+    </div>
 
+    <h>FOOT TABLE</h>
+    <div class="container pt-4">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center">inputOperator</th>
+                        <th class="text-center">inputElement</th>
+                        <th class="text-center">inputAttribute</th>
+                        <th class="text-center">inputMethod</th>
+                        <th class="text-center">inputMethodText</th>
+                        <th class="text-center">Remove Row</th>
+                        <th class="text-center">Add SubRow</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyFoot">
+                </tbody>
+            </table>
+        </div>
     </div>
 }
 
 @section Scripts{
     <script>
-        var rowIdTitle = 'oForm_tableRules_Row_';
-
+        var headRowIdTitle = 'oForm_tableRules_headRow_';
+        var footRowIdTitle = 'oForm_tableRules_footRow_';
 
         $(document).ready(function () {
-            function SetAttributeEmpty() {
-                $('#inputAttribute').empty();
-                $('#inputAttribute').append($('<option></option>').val('').text('請先選擇起始元件'));
-            }
+            ChangeAttributeReplaceWith();
 
-            //jQuery button click event to add a row
-            var rowIdx = 0;
-            $('#btnAddRow').on('click', function () {          
-                rowIdx++;
-                $('#tbody').append('<tr id=' + rowIdTitle + rowIdx + '><td class="text-center">' + $("#inputOperator").val() + '</td><td class="text-center">' + $("#inputElement").val() + '</td><td class="text-center">' + $("#inputAttribute").val() + '</td><td class="text-center">' + $("#inputMethod").val() + '</td><td class="text-center">' + $("#inputMethodText").val() + '</td><td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button></td></tr>');
-                $("#oForm_tableRules_Row_1").find("td:first").html("");
-                setFirstTd();
+            //row expand key word => data-toggle="collapse", <a data-toggle="collapse" href="#collapseExample">+</a>
+            var headRowIndex = 0;
+            var footRowIndex = 0;
+
+            $('#btnAddRow').on('click', function () {                
+                var type = $('#inputType').val();
+
+                if (type == "HEAD") {
+                    headRowIndex++;
+                    var trId = headRowIdTitle + headRowIndex
+                    $('#tbodyHead').append('<tr id=' + trId + '><td class="text-center">' + $("#inputOperator").val() + '</td><td class="text-center">' + $("#inputElement").val() + '</td><td class="text-center">' + $("#inputAttribute").val() + '</td><td class="text-center">' + $("#inputMethod").val() + '</td><td class="text-center">' + $("#inputMethodText").val() + '</td><td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button><td class="text-center"><button class="btn btn-info addSubRow" type="button">AddSubRow</button></td></tr>');
+                    setFirstTd(headRowIdTitle);   
+                }
+                else {
+                    footRowIndex++;
+                    var trId = footRowIdTitle + footRowIndex
+                    $('#tbodyFoot').append('<tr id=' + trId + '><td class="text-center">' + $("#inputOperator").val() + '</td><td class="text-center">' + $("#inputElement").val() + '</td><td class="text-center">' + $("#inputAttribute").val() + '</td><td class="text-center">' + $("#inputMethod").val() + '</td><td class="text-center">' + $("#inputMethodText").val() + '</td><td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button><td class="text-center"><button class="btn btn-info addSubRow" type="button">AddSubRow</button></td></tr>');
+                    setFirstTd(footRowIdTitle);
+                }                
             });
 
-            $('#inputElement').change(function () { ChangeAttributeReplaceWith(); });
+            $('#tbodyHead').on('click', '.remove', function () {
+                if (!$(this).closest('tr').hasClass('subrow'))
+                {// 移除主Row
+                    var currentTrId = $(this).closest('tr').attr('id')
+                    var subRows = getSubRow(currentTrId);
+                    subRows.each(function () {
+                        $(this).closest('tr').remove();
+                    })
+
+                    /* 重新設定ID */
+                    var child = $(this).closest('tr').nextAll().not(".subrow")
+                    child.each(function () {
+                        var id = $(this).attr('id');
+                        var dig = parseInt(id.substring(21));
+
+                        // Modifying row index.
+                        //idx.html(`${dig - 1}`);
+
+                        // Modifying row id.
+                        renameSubRow2(id, `${rowIdTitle}${dig - 1}`);
+                        $(this).attr('id', `${rowIdTitle}${dig - 1}`);
+                    });
+
+                    $(this).closest('tr').remove();
+
+                    headRowIndex--;
+                }
+                else {
+                    var id = $(this).closest('tr').attr('id');
+                    var idSplit = id.split('_');
+                    $(this).closest('tr').remove();
+                    var parentId = idSplit[0] + '_' + idSplit[1] + '_' + idSplit[2] + '_'+ idSplit[3]
+                    renameSubRow(parentId);
+                }
 
 
-            // jQuery button click event to remove a row. 
-            $('#tbody').on('click', '.remove', function () {               
-                // Getting all the rows next to the row 
-                // containing the clicked button 
-                var child = $(this).closest('tr').nextAll();
-
-                // Iterating across all the rows  
-                // obtained to change the index 
-                child.each(function () {
-                    // Getting <tr> id. 
-                    var id = $(this).attr('id');
-
-                    // Getting the <p> inside the .row-index class. 
-                    //var idx = $(this).children('.row-index').children('p');
-
-                    // Gets the row number from <tr> id. 
-                    var dig = parseInt(id.substring(21));
-
-                    // Modifying row index. 
-                    //idx.html(`${dig - 1}`);
-
-                    // Modifying row id. 
-                    $(this).attr('id', `${rowIdTitle}${dig - 1}`);
-                });
-
-                // Removing the current row. 
-                $(this).closest('tr').remove();
-
-                // Decreasing total number of rows by 1. 
-                rowIdx--;   
                 setFirstTd();
             });
+            $('#tbodyHead').on('click', '.addSubRow', function () {
+                var parentRowId = $(this).closest('tr').attr('id');
+
+                $('#' + parentRowId).after('<tr class = "subrow" id=' + parentRowId + '_SubRow' + '><td class="text-center">' + $("#inputOperator").val() + '</td><td class="text-center">' + $("#inputElement").val() + '</td><td class="text-center">' + $("#inputAttribute").val() + '</td><td class="text-center">' + $("#inputMethod").val() + '</td><td class="text-center">' + $("#inputMethodText").val() + '</td><td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button></td><td></td></tr>');
+                renameSubRow(parentRowId)
+            });
+            
+            $('#tbodyFoot').on('click', '.remove', function () {
+                if (!$(this).closest('tr').hasClass('subrow')) {// 移除主Row
+                    var currentTrId = $(this).closest('tr').attr('id')
+                    var subRows = getSubRow(currentTrId);
+                    subRows.each(function () {
+                        $(this).closest('tr').remove();
+                    })
+
+                    /* 重新設定ID */
+                    var child = $(this).closest('tr').nextAll().not(".subrow")
+                    child.each(function () {
+                        var id = $(this).attr('id');
+                        var dig = parseInt(id.substring(21));
+
+                        // Modifying row index.
+                        //idx.html(`${dig - 1}`);
+
+                        // Modifying row id.
+                        renameSubRow2(id, `${rowIdTitle}${dig - 1}`);
+                        $(this).attr('id', `${rowIdTitle}${dig - 1}`);
+                    });
+
+                    $(this).closest('tr').remove();
+
+                    footRowIndex--;
+                }
+                else {
+                    var id = $(this).closest('tr').attr('id');
+                    var idSplit = id.split('_');
+                    $(this).closest('tr').remove();
+                    var parentId = idSplit[0] + '_' + idSplit[1] + '_' + idSplit[2] + '_' + idSplit[3]
+                    renameSubRow(parentId);
+                }
+
+
+                setFirstTd();
+            });
+            $('#tbodyFoot').on('click', '.addSubRow', function () {
+                var parentRowId = $(this).closest('tr').attr('id');
+
+                $('#' + parentRowId).after('<tr class = "subrow" id=' + parentRowId + '_SubRow' + '><td class="text-center">' + $("#inputOperator").val() + '</td><td class="text-center">' + $("#inputElement").val() + '</td><td class="text-center">' + $("#inputAttribute").val() + '</td><td class="text-center">' + $("#inputMethod").val() + '</td><td class="text-center">' + $("#inputMethodText").val() + '</td><td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button></td><td></td></tr>');
+                renameSubRow(parentRowId)
+            });
+
+
         })
 
         function ChangeAttributeReplaceWith() {
-            var inputElement = $.trim($('#inputElement option:selected').val());
-            if (inputElement.length == 0) {
-                SetAttributeEmpty();
-            }
-            else {
                 $.ajax(
                     {
                         url: "@Url.Action("GetAttributeData", "Home")",
-                        data: { element: inputElement },
+                        data: { /*element: inputElement*/ },
                         type: 'post',
                         cache: false,
                         async: false,
@@ -137,11 +237,41 @@
                             }
                         }
                     });
-            }
+
+            //var inputElement = $.trim($('#inputElement option:selected').val());
+            //if (inputElement.length == 0) {
+            //    SetAttributeEmpty();
+            //}
+            //else {
+
+            //}
         }
 
-        function setFirstTd() {
-            $("#oForm_tableRules_Row_1").find("td:first").html("");
+        function setFirstTd(title) {
+            //Table的第一個Row的運算子要拿掉
+            $("#" + title + "_1").find("td:first").html("");
+        }
+
+        function getSubRow(parentRowId) {
+            return $('tr[id^="' + parentRowId + '"]').filter('.subrow');
+        }
+
+        function renameSubRow(parentRowId) {
+            var idx = 0;
+            var subRows = getSubRow(parentRowId);
+            subRows.each(function () {
+                idx++;
+                $(this).attr('id', `${parentRowId}_${idx}`);
+            });
+        }
+
+        function renameSubRow2(parentRowId, newParentRowId) {
+            var idx = 0;
+            var subRows = getSubRow(parentRowId);
+            subRows.each(function () {
+                idx++;
+                $(this).attr('id', `${newParentRowId}_${idx}`);
+            });
         }
     </script>
 }

@@ -38,10 +38,10 @@ namespace XmlRuleHelper.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetAttributeData(string element)
+        public ActionResult GetAttributeData(/*tring element*/)
         {
             string resJson = string.Empty;
-            IEnumerable<XElement> data = from c in purchaseOrder.Descendants(element) select c;
+            IEnumerable<XElement> data = from c in purchaseOrder.Descendants() select c;
             var qq = data.OfType<XElement>().Attributes().Select(c => c.Name.LocalName);
             resJson += "<select id = \"inputAttribute\" class = \"form-control\">";
             foreach (var itemAttr in qq.Distinct())
