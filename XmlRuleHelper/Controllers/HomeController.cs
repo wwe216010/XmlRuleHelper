@@ -42,7 +42,7 @@ namespace XmlRuleHelper.Controllers
         {
             string resJson = string.Empty;
             IEnumerable<XElement> data = from c in purchaseOrder.Descendants() select c;
-            var qq = data.OfType<XElement>().Attributes().Select(c => c.Name.LocalName);
+            var qq = data.OfType<XElement>().Attributes().Select(c => c.Name.LocalName).OrderBy(c => c.ToString());
             resJson += "<select id = \"inputAttribute\" class = \"form-control\">";
             foreach (var itemAttr in qq.Distinct())
             {
