@@ -4,25 +4,25 @@
 
 
     <form class="container pt-4">
-        <div class="row">
+        <!--<div class="row">
             <div class="form-group col-md-6">
                 <label for="inputElement">加入類別</label>
                 <select id="inputType" class="form-control">
-                    <option value="ALIAS">別名</option>
+                    <option value="SOURCE">來源</option>
                     <option value="CONDITION">條件</option>
                 </select>
             </div>
             <div class="form-group col-md-6">
-                <label for="inputElement"></label>
+                <label for="inputElement"></label>-->
                 @*<input type="text" class="form-control" id="inputGroupName">*@
-            </div>
-        </div>
+            <!--</div>
+        </div>-->
 
         <div class="row">
-            <div class="form-group col-md-6">
+            @*<div class="form-group col-md-6">
                 <label for="inputElement">元件</label>
                 @Html.DropDownList("inputElement", (IEnumerable<SelectListItem>)ViewData["inputElement"], new { @class = "form-control" })
-            </div>
+            </div>*@
             <div class="form-group col-md-6">
                 <label for="inputAttribute">元件屬性</label>
                 <select id="inputAttribute" class="form-control">
@@ -32,7 +32,7 @@
         </div>
 
         <div class="row">
-            <div class="form-group col-md-6">
+            @*<div class="form-group col-md-6">
                 <label for="inputMethod">篩選條件</label>
                 <select id="inputMethod" class="form-control">
                     <option value="StartWith">開頭包含</option>
@@ -44,14 +44,14 @@
                     <option value="NotEqual">大於等於</option>
                     <option value="NotEqual">小於等於</option>
                 </select>
-            </div>
-            <div class="form-group col-md-6">
+            </div>*@
+            @*<div class="form-group col-md-6">
                 <label for="inputMethodText">篩選條件參數</label>
                 <input type="text" class="form-control" id="inputMethodText">
-            </div>
+            </div>*@
         </div>
 
-        <div class="row">
+        @*<div class="row">
             <div class="form-group col-md-6">
                 <label for="inputOperator">運算子</label>
                 <select id="inputOperator" class="form-control">
@@ -59,88 +59,83 @@
                     <option value="Or">Or</option>
                 </select>
             </div>
-        </div>
-
-
-        <button class="btn btn-md btn-primary" id="btnAddRow" type="button"> Add new Row</button>
-        <button type="submit" class="btn btn-primary">Sign in</button>
+        </div>*@
+        @*<button type="submit" class="btn btn-primary">Sign in</button>*@
     </form>
 
     <br>
-    <h>Set ALIAS</h>
-    <div class="container pt-4">
-        <div class="aliasdiv table-responsive">
+    <h style="color:#ff0000; font-size:30px">Set SOURCE</h>
+    <div class="container pt-4" style="border-color:#ff0000;border-width:3px;border-style:solid;padding:5px;">
+        <div class="sourcediv table-responsive">
             @*<table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-center">inputOperator</th>
-                        <th class="text-center">inputElement</th>
-                        <th class="text-center">inputAttribute</th>
-                        <th class="text-center">inputMethod</th>
-                        <th class="text-center">inputMethodText</th>
-                        <th class="text-center">HeadGroupName</th>
-                        <th class="text-center">resultName</th>
-                        <th class="text-center">Remove Row</th>
-                        <th class="text-center">Add SubRow</th>
-                    </tr>
-                </thead>
-                <tbody id="tbodyHead">
-                </tbody>
-            </table>*@
+                    <thead>
+                        <tr>
+                            <th class="text-center">inputOperator</th>
+                            <th class="text-center">inputElement</th>
+                            <th class="text-center">inputAttribute</th>
+                            <th class="text-center">inputMethod</th>
+                            <th class="text-center">inputMethodText</th>
+                            <th class="text-center">HeadGroupName</th>
+                            <th class="text-center">resultName</th>
+                            <th class="text-center">Remove Row</th>
+                            <th class="text-center">Add SubRow</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyHead">
+                    </tbody>
+                </table>*@
         </div>
     </div>
+    <button class="btn btn-md btn-primary" id="btnAddSourceRow" type="button">新增來源</button>
 
-    <h>FOOT TABLE</h>
-    <div class="container pt-4">
-        <div class=" table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-center">inputOperator</th>
-                        <th class="text-center">inputElement</th>
-                        <th class="text-center">inputAttribute</th>
-                        <th class="text-center">inputMethod</th>
-                        <th class="text-center">inputMethodText</th>
-                        <th class="text-center">resultName</th>
-                        <th class="text-center">Remove Row</th>
-                        <th class="text-center">Add SubRow</th>
-                    </tr>
-                </thead>
-                <tbody id="tbodyFoot">
-                </tbody>
-            </table>
+
+    <br>
+    <h style="color: #006eff; font-size: 30px">Set CONDITION</h>
+    <div class="container pt-4" style="border-color:#006eff;border-width:3px;border-style:solid;padding:5px;">
+        <div class="conditiondiv table-responsive">
+            @*<table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-center">inputOperator</th>
+                            <th class="text-center">inputElement</th>
+                            <th class="text-center">inputAttribute</th>
+                            <th class="text-center">inputMethod</th>
+                            <th class="text-center">inputMethodText</th>
+                            <th class="text-center">resultName</th>
+                            <th class="text-center">Remove Row</th>
+                            <th class="text-center">Add SubRow</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyFoot">
+                    </tbody>
+                </table>*@
         </div>
     </div>
+    <button class="btn btn-md btn-primary" id="btnAddConditionRow" type="button">新增條件</button>
 }
 
 @section Scripts{
     <script>
-        var RoleRowIdTitle = 'oForm_tableRoles_Row_';
-        var footRowIdTitle = 'oForm_tableRules_footRow_';
-        const aryHeadGroupName = [];
+        var SourceRowIdTitle = 'oForm_SourceRow_';
+        var ConditionRowIdTitle = 'oForm_ConditionRow_';
+        var sourceElement = '';
+        const arySource = [];
+        const aryCondition = [];
 
         $(document).ready(function () {
             //row expand key word => data-toggle="collapse", <a data-toggle="collapse" href="#collapseExample">+</a>
-            ChangeAttributeReplaceWith();            
-            var headRowIndex = 0;
-            var footRowIndex = 0;
+            ChangeAttributeReplaceWith();
+            var sourceRowIndex = 0;
+            var conditionRowIndex = 0;
 
-            $('#btnAddRow').on('click', function () {                
-                var type = $('#inputType').val();
-                if (type == "ALIAS") {
-                    headRowIndex++;
-                    var trId = RoleRowIdTitle + headRowIndex
-                    $('.aliasdiv').append(aliasAppend(trId, 'M'));
-                    setFirstTd(trId);
-                }
-                else {
-                    footRowIndex++;
-                    var trId = footRowIdTitle + footRowIndex
-                    $('#tbodyFoot').append('<tr id=' + trId + '><td class="text-center">' + $("#inputOperator").val() + '</td><td class="text-center tdSelGroupName">' + getHeadGroupName() + '</td><td class="text-center">' + $("#inputAttribute").val() + '</td><td class="text-center">' + $("#inputMethod option:selected").text() + '</td><td class="text-center">' + $("#inputMethodText").val() + '</td><td><input type="text"></input></td><td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button><td class="text-center"><button class="btn btn-info addSubRow" type="button">AddSubRow</button></td></tr>');
-                }                
+            /******來源區塊*****/
+            $('#btnAddSourceRow').on('click', function () {
+                sourceRowIndex++;
+                var trId = SourceRowIdTitle + sourceRowIndex
+                $('.sourcediv').append(sourceAppend(trId, 'M'));
+                setFirstTd(trId);
             });
-
-            $('.aliasdiv').on('click', '.remove', function () {
+            $('.sourcediv').on('click', '.remove', function () {
                 if (!$(this).closest('tr').hasClass('subrow'))
                 {// 移除主Row
                     var currentTrId = $(this).closest('tr').attr('id')
@@ -159,24 +154,24 @@
                         //idx.html(`${dig - 1}`);
 
                         // Modifying row id.
-                        renameSubRow2(id, `${RoleRowIdTitle}${dig - 1}`);
-                        $(this).attr('id', `${RoleRowIdTitle}${dig - 1}`);
+                        renameSubRow2(id, `${SourceRowIdTitle}${dig - 1}`);
+                        $(this).attr('id', `${SourceRowIdTitle}${dig - 1}`);
                     });
 
                     //Head刪除主Row後，有相依的Foot Row也要一併刪除
-                    var alias = $(this).closest('tr').find('td[class*="alias"]').html();
-                    if (alias.length > 0) {
-                        $('#tbodyFoot').find('tr td[class*="tdSelGroupName"] select').each(function () {
-                            if ($(this).val() == alias) {
-                                $('#tbodyFoot').find('tr button[class*="remove"]').click();
+                    var source = $(this).closest('tr').find('td[class*="source"]').html();
+                    if (source.length > 0) {
+                        $('.conditiondiv').find('tr td[class*="tdSource"] select').each(function () {
+                            if ($(this).val() == source) {
+                                $('.conditiondiv').find('tr button[class*="remove"]').click();
                             }
                         })
-                        //移除下拉選單對應的GroupName
-                        updateSelectGroupName("R", alias);
+                        //移除下拉選單對應的Source
+                        updateSource("R", source);
                     }
                     $(this).closest('table').remove();
 
-                    headRowIndex--;
+                    sourceRowIndex--;
                 }
                 else
                 {//移除次Row
@@ -190,32 +185,48 @@
 
                 setFirstTd();
             });
-            $('.aliasdiv').on('click', '.addSubRow', function () {
+            $('.sourcediv').on('click', '.addSubRow', function () {
                 var parentRowId = $(this).closest('tr').attr('id');
-                $('#' + parentRowId).after(aliasAppend(parentRowId, 'D'))
+                $('#' + parentRowId).after(sourceAppend(parentRowId, 'D'))
                 renameSubRow(parentRowId)
             });
-            $('.aliasdiv').on('click', '.setAlias', function () {
+            $('.sourcediv').on('click', '.setSource', function () {
                 if (confirm('別名設定後無法變更\n\n請確認！') == true) {
-                    var inputAlias = $(this).closest('tr').find('td[class*="alias"] input').val().trim();
+                    var inputSource = $(this).closest('tr').find('td[class*="source"] input').val().trim();
                     //加入源頭條件群組名稱至下拉選單
-                    if (inputAlias.length > 0) {
+                    if (inputSource.length > 0) {
                         /*新增下拉選單選項*/
-                        updateSelectGroupName("A", inputAlias)
+                        var res = updateSource("A", inputSource)
+                        if (res.length > 0) {
+                            alert(res);
+                            return;
+                        }
                         //確認別名後，無法再進行異動
-                        $(this).closest('tbody').find('td[class*="alias"] input').attr('disabled', true);
-                        $(this).closest('tbody').find('button[class*="setAlias"]').attr('disabled', true);
-                        $(this).closest('tbody').find('button[class*="remove"]').attr('disabled', true);
-                        $(this).closest('tbody').find('button[class*="addSubRow"]').attr('disabled', true);
+                        $(this).closest('tbody').find('button').attr('disabled', true);
+                        $(this).closest('tbody').find('select').attr('disabled', true);
+                        $(this).closest('tbody').find('input').attr('disabled', true);
                         //變更<tbody> ID
-                        $(this).closest('tr').parent('tbody').attr('id', 'tbody_' + inputAlias);
-                    }  
+                        $(this).closest('tr').parent('tbody').attr('id', 'tbody_' + inputSource);
+                    }
                 } else {
                     return ;
-                }            
+                }
             })
-            
-            $('#tbodyFoot').on('click', '.remove', function () {
+
+
+            /******條件區塊*****/
+            $('#btnAddConditionRow').on('click', function () {
+                if (arySource.length <= 0) {
+                    alert('請先設定來源別名!');
+                    return;
+                }
+
+                conditionRowIndex++;
+                var trId = ConditionRowIdTitle + conditionRowIndex
+                $('.conditiondiv').append(conditionAppend(trId, 'M'));
+                setFirstTd(trId);
+            });
+            $('.conditiondiv').on('click', '.remove', function () {
                 if (!$(this).closest('tr').hasClass('subrow')) {// 移除主Row
                     var currentTrId = $(this).closest('tr').attr('id')
                     var subRows = getSubRow(currentTrId);
@@ -233,13 +244,13 @@
                         //idx.html(`${dig - 1}`);
 
                         // Modifying row id.
-                        renameSubRow2(id, `${footRowIdTitle}${dig - 1}`);
-                        $(this).attr('id', `${footRowIdTitle}${dig - 1}`);
+                        renameSubRow2(id, `${ConditionRowIdTitle}${dig - 1}`);
+                        $(this).attr('id', `${ConditionRowIdTitle}${dig - 1}`);
                     });
 
-                    $(this).closest('tr').remove();
+                    $(this).closest('table').remove();
 
-                    footRowIndex--;
+                    conditionRowIndex--;
                 }
                 else {
                     var id = $(this).closest('tr').attr('id');
@@ -252,15 +263,37 @@
 
                 //setFirstTd();
             });
-            $('#tbodyFoot').on('click', '.addSubRow', function () {
+            $('.conditiondiv').on('click', '.addSubRow', function () {
                 var parentRowId = $(this).closest('tr').attr('id');
-
-                $('#' + parentRowId).after('<tr class = "subrow" id=' + parentRowId + '_SubRow' + '><td class="text-center">' + $("#inputOperator").val() + '</td><td class="text-center tdSelGroupName">' + getHeadGroupName() + '</td>><td class="text-center">' + $("#inputAttribute").val() + '</td><td class="text-center">' + $("#inputMethod option:selected").text() + '</td><td class="text-center">' + $("#inputMethodText").val() + '</td><td></td><td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button></td><td></td></tr>');
+                $('#' + parentRowId).after(conditionAppend(parentRowId, 'D'));
                 renameSubRow(parentRowId)
             });
-            $('#tbodyFoot').on('change', '.selGroupName', function () {
-                var sel = $(this).closest('tr').find('td[class*="tdSelGroupName"] select');
-                sel.attr("headGroupName", sel.val());
+            $('.conditiondiv').on('click', '.setCondition', function () {
+                if (confirm('別名設定後無法變更\n\n請確認！') == true) {
+                    var inputSource = $(this).closest('tr').find('td[class*="condition"] input').val().trim();
+                    //加入源頭條件群組名稱至下拉選單
+                    if (inputSource.length > 0) {
+                        /*新增下拉選單選項*/
+                        var res = updateCondition("A", inputSource)
+                        if (res.length > 0) {
+                            alert(res);
+                            return;
+                        }
+
+                        //確認別名後，無法再進行異動
+                        $(this).closest('tbody').find('button').attr('disabled', true);
+                        $(this).closest('tbody').find('select').attr('disabled', true);
+                        $(this).closest('tbody').find('input').attr('disabled', true);
+                        //變更<tbody> ID
+                        $(this).closest('tr').parent('tbody').attr('id', 'tbody_' + inputSource);
+                    }
+                } else {
+                    return;
+                }
+            })
+            $('.conditiondiv').on('change', '.selSource', function () {
+                var sel = $(this).closest('tr').find('td[class*="tdSource"] select');
+                sel.attr("source", sel.val());
             })
         })
 
@@ -281,15 +314,18 @@
                     });
         }
 
+        //把第一個tr的第一個td變空白
         function setFirstTd(title) {
             //Table的第一個Row的運算子要拿掉
             $("#" + title).find("td:first").html("");
         }
 
+        //取得次Row
         function getSubRow(parentRowId) {
             return $('tr[id^="' + parentRowId + '"]').filter('.subrow');
         }
 
+        //刪除次tr後，所有tr都要重新給ID
         function renameSubRow(parentRowId) {
             var idx = 0;
             var subRows = getSubRow(parentRowId);
@@ -299,6 +335,7 @@
             });
         }
 
+        //刪除主tr後，所有之後的主.次tr都要重新給ID
         function renameSubRow2(parentRowId, newParentRowId) {
             var idx = 0;
             var subRows = getSubRow(parentRowId);
@@ -308,73 +345,118 @@
             });
         }
 
-        function getHeadGroupName() {
+        //取得來源別名下拉選單
+        function getSource() {
             var res = '';
-            if (aryHeadGroupName.length > 0) {
-                res += '<select class="selGroupName">'
-                for (var i = 0; i < aryHeadGroupName.length; i++) {
+            if (arySource.length > 0) {
+                res += '<select class="form-control selSource">'
+                for (var i = 0; i < arySource.length; i++) {
 
-                    res += '<option>' + aryHeadGroupName[i].value + '</Option >'
+                    res += '<option>' + arySource[i].value + '</Option >'
                 }
                 res += '</select>'
             }
             return res;
         }
 
-        function updateSelectGroupName(type, alias) {
+        //(新增.刪除來源後)更新來源別名下拉選單
+        function updateSource(type, source) {
             if (type == "A") {
-                var arraycontainsturtles = (aryHeadGroupName.indexOf("aa") > -1);
-                for (var i = 0; i < aryHeadGroupName.length; i++) {
-                    if (aryHeadGroupName[i].value == alias) {
-                        alert("別名重複!!!");
-                        return;
+                for (var i = 0; i < arySource.length; i++) {
+                    if (arySource[i].value == source) {
+                        return "來源別名重複!!!";
                     }
                 }
 
-                aryHeadGroupName.push({
-                    key: alias,
-                    value: alias
+                arySource.push({
+                    key: source,
+                    value: source
                 });
             }
             else if (type == "R") {
-                for (var i = 0; i < aryHeadGroupName.length; i++) {
-                    if (aryHeadGroupName[i].value == alias) {
-                        aryHeadGroupName.splice(i, 1)
+                for (var i = 0; i < arySource.length; i++) {
+                    if (arySource[i].value == source) {
+                        arySource.splice(i, 1)
                     }
                 }
             }
 
-            $('.selGroupName').replaceWith(getHeadGroupName());
+            $('.selSource').replaceWith(getSource());
+            return ''
         }
 
-        function aliasAppend(trId, type) {
-            var thead = '<table class="table table-bordered">\
+        //取得條件別名下拉選單
+        function getCondition() {
+            var res = '';
+            if (aryCondition.length > 0) {
+                res += '<select class="selCondition">'
+                for (var i = 0; i < aryCondition.length; i++) {
+
+                    res += '<option>' + aryCondition[i].value + '</Option >'
+                }
+                res += '</select>'
+            }
+            return res;
+        }
+
+        //(新增.刪除條件後)更新條件別名下拉選單
+        function updateCondition(type, condition) {
+            if (type == "A") {
+                for (var i = 0; i < aryCondition.length; i++) {
+                    if (aryCondition[i].value == condition) {
+                        return "條件別名重複!!!";
+                    }
+                }
+
+                aryCondition.push({
+                    key: condition,
+                    value: condition
+                });
+            }
+            else if (type == "R") {
+                for (var i = 0; i < aryCondition.length; i++) {
+                    if (aryCondition[i].value == source) {
+                        aryCondition.splice(i, 1)
+                    }
+                }
+            }
+
+            $('.selCondition').replaceWith(getCondition);
+            return ''
+        }
+
+        //新增來源Row
+        function sourceAppend(trId, type) {
+            //先執行ajax取得sourceElement清單，並存放到全域變數sourceElement
+            getSelect('sourceElement');            
+
+            var thead = '<table class="table table-bordered" style="border:3px #cccccc solid;">\
                 <thead>\
                     <tr>\
-                        <th class="text-center">inputOperator</th>\
-                        <th class="text-center">inputElement</th>\
+                        <th class="text-center">OPERATOR</th>\
+                        <th class="text-center">ELEMENT</th>\
                         <th class="text-center">inputAttribute</th>\
-                        <th class="text-center">inputMethod</th>\
-                        <th class="text-center">inputMethodText</th>\
-                        <th class="text-center">alias</th>\
-                        <th class="text-center">setAlias</th>\
+                        <th class="text-center">METHOD</th>\
+                        <th class="text-center">METHOD TEXT</th>\
+                        <th class="text-center">source</th>\
+                        <th class="text-center">setSource</th>\
                         <th class="text-center">Remove Row</th>\
                         <th class="text-center">Add SubRow</th>\
                     </tr>\
                 </thead>\
-                <tbody>' 
+                <tbody>'
 
             var tr = ''
             if (type == "M") {
                 tr = '\
                 <tr id = ' + trId + ' >\
-                <td class="text-center">' + $("#inputOperator").val() + '</td>\
-                <td class="text-center">' + $("#inputElement").val() + '</td>\
+                <td class="text-center">' + getSelect('Operator') + '</td>\
+                <td class="text-center">' + sourceElement + '</td>\
                 <td class="text-center">' + $("#inputAttribute").val() + '</td>\
-                <td class="text-center">' + $("#inputMethod option:selected").text() + '</td>\
-                <td class="text-center">' + $("#inputMethodText").val() + '</td>\
-                <td class="text-center alias"><input></input></td>\
-                <td class="text-center" ><button class="btn btn-info setAlias" type="button">SetAlias</button></td >\
+                <td class="text-center">' + getSelect('method') + '</td>\
+                <td class="text-center">' + getSelect('methodText') + '</td>\
+                <td class="text-center source"><input type="text"></input></td>\
+                <td class="text-center" ><button class="btn btn-info setSource" type="button">setSource</button></td >\
                 <td class="text-center" > <button class="btn btn-danger remove" type="button">Remove</button></td>\
                 <td class="text-center"><button class="btn btn-info addSubRow" type="button">AddSubRow</button></td>\
                 </tr></tbody></table>';
@@ -384,11 +466,11 @@
             else {
                 tr = '\
                 <tr class = "subrow" id=' + trId + '_SubRow' + '>\
-                <td class="text-center" > ' + $("#inputOperator").val() + '</td>\
-                <td class="text-center tdSelGroupName" > ' + getHeadGroupName() + '</td >\
+                <td class="text-center" > ' + getSelect('operator') + '</td>\
+                <td class="text-center tdSource" > ' + getSource() + '</td >\
                 <td class="text-center">' + $("#inputAttribute").val() + '</td>\
-                <td class="text-center">' + $("#inputMethod option:selected").text() + '</td>\
-                <td class="text-center">' + $("#inputMethodText").val() + '</td>\
+                <td class="text-center">' + getSelect('method') + '</td>\
+                <td class="text-center">' + getSelect('methodText') + '</td>\
                 <td></td>\
                 <td></td>\
                 <td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button></td>\
@@ -399,23 +481,109 @@
             }
         }
 
-        function getOption_Type() {
-            var datas = '{"type": "getOption_Type"}';//'{"type": "getOption_Type","lineId":"1"}';
-            var action = projectName + "Combobox/CommonQuery";
-            $.ajax({
-                url: action,
-                type: "POST",
-                cache: false,
-                async: false,
-                data: { data: datas },
-                error: function (xhr) { },
-                success: function (res) {
-                    res = $('<div/>').html(res.replace(/\n/g, "")).text();
-                    $("#allData").val(res);
-                }
-            });
+        //新增條件Row
+        function conditionAppend(trId, type) {           
+            var thead = '\
+<table class="table table-bordered" style="border:3px #cccccc solid;">\
+    <thead >\
+        <tr>\
+        <th class="text-center">OPERATOR</th>\
+        <th class="text-center">SOURCE</th>\
+        <th class="text-center">inputAttribute</th>\
+        <th class="text-center">METHOD</th>\
+        <th class="text-center">METHOD TEXT</th>\
+        <th class="text-center">condition</th>\
+        <th class="text-center">setCondition</th>\
+        <th class="text-center">Remove Row</th>\
+        <th class="text-center">Add SubRow</th>\
+        </tr>\
+    </thead>\
+<tbody>';
+
+            var tr = ''
+            if (type == "M") {
+                tr = '\
+<tr id=' + trId + '>\
+    <td class="text-center" > ' + getSelect('operator') + '</td >\
+    <td class="text-center tdSource" > ' + getSource() + '</td >\
+    <td class="text-center">' + $("#inputAttribute").val() + '</td>\
+    <td class="text-center">' + getSelect('method') + '</td>\
+    <td class="text-center">' + getSelect('methodText') + '</td>\
+    <td class="text-center condition"><input type="text"></input></td>\
+    <td class="text-center" ><button class="btn btn-info setCondition" type="button">setCondition</button></td >\
+    <td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button></td>\
+    <td class="text-center" > <button class="btn btn-info addSubRow" type="button">AddSubRow</button></td>\
+</tr >\
+</thead>\
+<tbody>';
+
+                return thead + tr
+            }
+            else {
+                tr = '\
+<tr class = "subrow" id=' + trId + '_SubRow' + '>\
+    <td class="text-center">' + getSelect('operator') + '</td>\
+    <td class="text-center tdSource">' + getSource() + '</td>\
+    <td class="text-center">' + $("#inputAttribute").val() + '</td>\
+    <td class="text-center">' + getSelect('method') + '</td>\
+    <td class="text-center">' + getSelect('methodText') + '</td>\
+    <td></td>\
+    <td></td>\
+    <td class="text-center" > <button class="btn btn-danger remove" type="button">Remove</button></td >\
+    <td></td>\
+</tr >';
+
+                return tr;
+            }
         }
 
-
+        function getSelect(name) {
+            var res = ''
+            if (name == 'operator') {
+                res = '\
+                <select id="operator" class="form-control operator">\
+                    <option value = "And">And</option >\
+                    <option value="Or">Or</option>\
+                </select >\
+                ';
+                return res;
+            }
+            else if (name == 'sourceElement') {
+                $.ajax(
+                    {
+                        url: "@Url.Action("getSourceElement", "Home")",
+                        data: { /*element: inputElement*/ },
+                        type: 'post',
+                        cache: false,
+                        async: false,
+                        dataType: 'text',
+                        success: function (res) {
+                            if (res.length > 0) {
+                                sourceElement = res;
+                            }
+                        }
+                    });
+            }
+            else if (name == 'method') {
+                res = '\
+                    <select id = "inputMethod" class="form-control" >\
+                        <option value="StartWith">開頭包含</option>\
+                        <option value="EndWith">結尾包含</option>\
+                        <option value="Contain">包含</option>\
+                        <option value="Between">介於</option>\
+                        <option value="Equal">等於</option>\
+                        <option value="NotEqual">不等於</option>\
+                        <option value="NotEqual">大於等於</option>\
+                        <option value="NotEqual">小於等於</option>\
+                </select >\
+                ';
+                return res;
+            }
+            else if (name == 'methodText') {
+                res = '<input type="text" class="form-control">';
+                return res;
+                
+            }
+        }
     </script>
 }

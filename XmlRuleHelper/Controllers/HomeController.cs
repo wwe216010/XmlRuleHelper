@@ -15,6 +15,11 @@ using System.Xml.Xsl;
 using System.Linq.Expressions;
 using System.Web.UI.WebControls;
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Web.Script.Serialization;
+
+
 namespace XmlRuleHelper.Controllers
 {
     public class HomeController : Controller
@@ -29,11 +34,15 @@ namespace XmlRuleHelper.Controllers
             purchaseOrder = XElement.Load(purchaseOrderFilepath);
 
             List<SelectListItem> inputElement = new List<SelectListItem>();
+            string sourceElement = string.Empty;
+            sourceElement += "<select class = \"form - control\">";
             foreach (var item in purchaseOrder.Elements().OfType<XElement>().Select(x => x.Name).Distinct())
             {
-                inputElement.Add(new SelectListItem() { Text = item.ToString(), Value = item.ToString() });
+                //inputElement.Add(new SelectListItem() { Text = item.ToString(), Value = item.ToString() });
+                sourceElement += string.Format("<option value=\"{0}\">{1}</option>", item.ToString(), item.ToString());
             }
-            ViewData["inputElement"] = inputElement;
+            sourceElement += "</select>";
+            ViewBag.sourceElement = HttpUtility.HtmlDecode(sourceElement);//inputElement;
             return View();
         }
 
@@ -50,6 +59,44 @@ namespace XmlRuleHelper.Controllers
             }
             resJson += "</select>";
             return Content(resJson);
+        }
+
+        /// <summary>
+        /// 設定加入類別
+        /// </summary>
+        /// <param name="srcDict"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public String getSourceElement(Dictionary<String, String> srcDict)
+        {
+            string sourceElement = "";
+            try
+            {
+                //List<Dictionary<string, string>> dicList = new List<Dictionary<string, string>>();                
+                //Dictionary<string, string> dic = null;
+                //foreach (var item in purchaseOrder.Elements().OfType<XElement>().Select(x => x.Name).Distinct())
+                //{
+                //    dic = new Dictionary<string, string>();
+                //    dic.Add("KEY", item.ToString());
+                //    dic.Add("TEXT", item.ToString());
+                //    dicList.Add(dic);
+                //}
+                //JavaScriptSerializer jss = new JavaScriptSerializer();
+                //res = jss.Serialize(dicList);
+                //return res;
+                sourceElement += "<select class = \"form-control\">";
+                foreach (var item in purchaseOrder.Elements().OfType<XElement>().Select(x => x.Name).Distinct())
+                {
+                    //inputElement.Add(new SelectListItem() { Text = item.ToString(), Value = item.ToString() });
+                    sourceElement += string.Format("<option value=\"{0}\">{1}</option>", item.ToString(), item.ToString());
+                }
+                sourceElement += "</select>";
+            }
+            catch (Exception)
+            {
+
+            }
+            return sourceElement;
         }
     }
 }

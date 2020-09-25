@@ -26,6 +26,8 @@ namespace XmlRuleHelper.Controllers
             {
                 case "Code":
                     return Content(getOption_Type(dict));
+                case "SourceElement":
+                    return Content(getOption_Type(dict));
                 default:
                     return Content("");
             }
