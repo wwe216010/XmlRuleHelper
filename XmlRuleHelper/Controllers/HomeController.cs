@@ -52,7 +52,7 @@ namespace XmlRuleHelper.Controllers
             string resJson = string.Empty;
             IEnumerable<XElement> data = from c in purchaseOrder.Descendants() select c;
             var qq = data.OfType<XElement>().Attributes().Select(c => c.Name.LocalName).OrderBy(c => c.ToString());
-            resJson += "<select id = \"inputAttribute\" class = \"form-control\">";
+            resJson += "<select id = \"inputAttribute\" class = \"form-control\" style=\"width:auto;\">";
             foreach (var itemAttr in qq.Distinct())
             {
                 resJson += string.Format("<option value=\"{0}\">{1}</option>", itemAttr, itemAttr);
@@ -84,7 +84,7 @@ namespace XmlRuleHelper.Controllers
                 //JavaScriptSerializer jss = new JavaScriptSerializer();
                 //res = jss.Serialize(dicList);
                 //return res;
-                sourceElement += "<select class = \"form-control\">";
+                sourceElement += "<select class = \"form-control\" style=\"width:auto;\">";
                 foreach (var item in purchaseOrder.Elements().OfType<XElement>().Select(x => x.Name).Distinct())
                 {
                     //inputElement.Add(new SelectListItem() { Text = item.ToString(), Value = item.ToString() });

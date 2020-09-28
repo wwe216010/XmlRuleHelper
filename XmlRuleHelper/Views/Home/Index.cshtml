@@ -14,56 +14,57 @@
             </div>
             <div class="form-group col-md-6">
                 <label for="inputElement"></label>-->
-                @*<input type="text" class="form-control" id="inputGroupName">*@
-            <!--</div>
+        @*<input type="text" class="form-control" id="inputGroupName">*@
+        <!--</div>
         </div>-->
 
         <div class="row">
             @*<div class="form-group col-md-6">
-                <label for="inputElement">元件</label>
-                @Html.DropDownList("inputElement", (IEnumerable<SelectListItem>)ViewData["inputElement"], new { @class = "form-control" })
-            </div>*@
-            <div class="form-group col-md-6">
-                <label for="inputAttribute">元件屬性</label>
-                <select id="inputAttribute" class="form-control">
-                    <option selected></option>
-                </select>
-            </div>
+                    <label for="inputElement">元件</label>
+                    @Html.DropDownList("inputElement", (IEnumerable<SelectListItem>)ViewData["inputElement"], new { @class = "form-control" })
+                </div>*@
+            @*<div class="form-group col-md-6">
+                    <label for="inputAttribute">元件屬性</label>
+                    <select id="inputAttribute" class="form-control">
+                        <option selected></option>
+                    </select>
+                </div>*@
         </div>
 
         <div class="row">
             @*<div class="form-group col-md-6">
-                <label for="inputMethod">篩選條件</label>
-                <select id="inputMethod" class="form-control">
-                    <option value="StartWith">開頭包含</option>
-                    <option value="EndWith">結尾包含</option>
-                    <option value="Contain">包含</option>
-                    <option value="Between">介於</option>
-                    <option value="Equal">等於</option>
-                    <option value="NotEqual">不等於</option>
-                    <option value="NotEqual">大於等於</option>
-                    <option value="NotEqual">小於等於</option>
-                </select>
-            </div>*@
+                    <label for="inputMethod">篩選條件</label>
+                    <select id="inputMethod" class="form-control">
+                        <option value="StartWith">開頭包含</option>
+                        <option value="EndWith">結尾包含</option>
+                        <option value="Contain">包含</option>
+                        <option value="Between">介於</option>
+                        <option value="Equal">等於</option>
+                        <option value="NotEqual">不等於</option>
+                        <option value="NotEqual">大於等於</option>
+                        <option value="NotEqual">小於等於</option>
+                    </select>
+                </div>*@
             @*<div class="form-group col-md-6">
-                <label for="inputMethodText">篩選條件參數</label>
-                <input type="text" class="form-control" id="inputMethodText">
-            </div>*@
+                    <label for="inputMethodText">篩選條件參數</label>
+                    <input type="text" class="form-control" id="inputMethodText">
+                </div>*@
         </div>
 
         @*<div class="row">
-            <div class="form-group col-md-6">
-                <label for="inputOperator">運算子</label>
-                <select id="inputOperator" class="form-control">
-                    <option value="And">And</option>
-                    <option value="Or">Or</option>
-                </select>
-            </div>
-        </div>*@
+                <div class="form-group col-md-6">
+                    <label for="inputOperator">運算子</label>
+                    <select id="inputOperator" class="form-control">
+                        <option value="And">And</option>
+                        <option value="Or">Or</option>
+                    </select>
+                </div>
+            </div>*@
         @*<button type="submit" class="btn btn-primary">Sign in</button>*@
     </form>
 
-    <br>
+    <br><br>    
+    <div id="source">
     <h style="color:#ff0000; font-size:30px">Set SOURCE</h>
     <div class="container pt-4" style="border-color:#ff0000;border-width:3px;border-style:solid;padding:5px;">
         <div class="sourcediv table-responsive">
@@ -87,9 +88,10 @@
         </div>
     </div>
     <button class="btn btn-md btn-primary" id="btnAddSourceRow" type="button">新增來源</button>
+    </div>
 
-
-    <br>
+    <br><br>  
+    <div id="condition">
     <h style="color: #006eff; font-size: 30px">Set CONDITION</h>
     <div class="container pt-4" style="border-color:#006eff;border-width:3px;border-style:solid;padding:5px;">
         <div class="conditiondiv table-responsive">
@@ -112,21 +114,43 @@
         </div>
     </div>
     <button class="btn btn-md btn-primary" id="btnAddConditionRow" type="button">新增條件</button>
+    </div>
+
+    <br><br>
+        <div id="logic">
+            <h style="color: #006eff; font-size: 30px">SetLOGIC</h>
+            <div class="container pt-4" style="border-color:#006eff;border-width:3px;border-style:solid;padding:5px;">
+                <select id="sel_logic" class="form-control">
+                    <option value="N">一般判斷式</option>
+                    <option value="IF">IF判斷式</option>
+                    <option value="IE">IF..ELSE判斷式</option>
+                </select>
+                <div class="col-md-6">
+                    <div class="logicdiv table-responsive">
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-md btn-primary" id="btnAddConditionRow" type="button">新增條件</button>
+        </div>
 }
 
 @section Scripts{
     <script>
         var SourceRowIdTitle = 'oForm_SourceRow_';
         var ConditionRowIdTitle = 'oForm_ConditionRow_';
+        var LogicIfRowIdTitle = 'oForm_LogicIfRow_';
         var sourceElement = '';
+        var attributeElement = '';
         const arySource = [];
         const aryCondition = [];
 
         $(document).ready(function () {
             //row expand key word => data-toggle="collapse", <a data-toggle="collapse" href="#collapseExample">+</a>
-            ChangeAttributeReplaceWith();
+            //ChangeAttributeReplaceWith();
             var sourceRowIndex = 0;
             var conditionRowIndex = 0;
+            var logicIfRowIndex = 0;
+
 
             /******來源區塊*****/
             $('#btnAddSourceRow').on('click', function () {
@@ -295,24 +319,55 @@
                 var sel = $(this).closest('tr').find('td[class*="tdSource"] select');
                 sel.attr("source", sel.val());
             })
-        })
 
-        function ChangeAttributeReplaceWith() {
-                $.ajax(
-                    {
-                        url: "@Url.Action("GetAttributeData", "Home")",
-                        data: { /*element: inputElement*/ },
-                        type: 'post',
-                        cache: false,
-                        async: false,
-                        dataType: 'html',
-                        success: function (data) {
-                            if (data.length > 0) {
-                                $('#inputAttribute').replaceWith(data);
-                            }
-                        }
-                    });
-        }
+
+            /******邏輯組合區塊*****/
+            $('.logicdiv').on('click', '.addif', function () {
+                var trId = LogicIfRowIdTitle + '1';
+                $('.logicdiv').find('#ifRow').after(logicAppend('A', trId));
+                renameSubRow(trId)
+            });
+            $('#sel_logic').on('change', function () {
+                if (aryCondition.length <= 0) {
+                    alert('qqq~');
+                    return;
+                }
+
+                $(".logicdiv").find('table').remove();
+                $('.logicdiv').append(logicAppend('C'));
+            })            
+
+            $.ajax(
+            {
+                url: "@Url.Action("getSourceElement", "Home")",
+                data: { /*element: inputElement*/ },
+                type: 'post',
+                cache: false,
+                async: false,
+                dataType: 'text',
+                success: function (res) {
+                    if (res.length > 0) {
+                        sourceElement = res;
+                    }
+                }
+                });
+
+            $.ajax(
+            {
+                url: "@Url.Action("GetAttributeData", "Home")",
+                data: { /*element: inputElement*/ },
+                type: 'post',
+                cache: false,
+                async: false,
+                dataType: 'text',
+                success: function (res) {
+                    if (res.length > 0) {
+                        attributeElement = res;
+                        //$('.inputAttribute').replaceWith(data);
+                    }
+                }
+            });
+        })
 
         //把第一個tr的第一個td變空白
         function setFirstTd(title) {
@@ -349,7 +404,7 @@
         function getSource() {
             var res = '';
             if (arySource.length > 0) {
-                res += '<select class="form-control selSource">'
+                res += '<select class="form-control selSource" style="width:auto;">'
                 for (var i = 0; i < arySource.length; i++) {
 
                     res += '<option>' + arySource[i].value + '</Option >'
@@ -381,7 +436,13 @@
                 }
             }
 
-            $('.selSource').replaceWith(getSource());
+            //$('.selSource').replaceWith(getSource());
+            $('.selSource').each(function () {
+                var attr = $(this).attr('disabled');
+                if (typeof attr == typeof undefined) {
+                    $(this).replaceWith(getSource());
+                }
+            })
             return ''
         }
 
@@ -389,10 +450,10 @@
         function getCondition() {
             var res = '';
             if (aryCondition.length > 0) {
-                res += '<select class="selCondition">'
+                res += '<select class="form-control selCondition" style="width:auto;">'
                 for (var i = 0; i < aryCondition.length; i++) {
 
-                    res += '<option>' + aryCondition[i].value + '</Option >'
+                    res += '<option title="ass~">' + aryCondition[i].value + '</Option >'
                 }
                 res += '</select>'
             }
@@ -428,14 +489,14 @@
         //新增來源Row
         function sourceAppend(trId, type) {
             //先執行ajax取得sourceElement清單，並存放到全域變數sourceElement
-            getSelect('sourceElement');            
+            getSelect('sourceElement');
 
             var thead = '<table class="table table-bordered" style="border:3px #cccccc solid;">\
                 <thead>\
                     <tr>\
                         <th class="text-center">OPERATOR</th>\
                         <th class="text-center">ELEMENT</th>\
-                        <th class="text-center">inputAttribute</th>\
+                        <th class="text-center">ATTRIBUTE</th>\
                         <th class="text-center">METHOD</th>\
                         <th class="text-center">METHOD TEXT</th>\
                         <th class="text-center">source</th>\
@@ -450,12 +511,12 @@
             if (type == "M") {
                 tr = '\
                 <tr id = ' + trId + ' >\
-                <td class="text-center">' + getSelect('Operator') + '</td>\
+                <td class="text-center">' + getSelect('operator') + '</td>\
                 <td class="text-center">' + sourceElement + '</td>\
-                <td class="text-center">' + $("#inputAttribute").val() + '</td>\
+                <td class="text-center">' + attributeElement+ '</select></td>\
                 <td class="text-center">' + getSelect('method') + '</td>\
                 <td class="text-center">' + getSelect('methodText') + '</td>\
-                <td class="text-center source"><input type="text"></input></td>\
+                <td class="text-center source"><input type="text" class="form-control"></input></td>\
                 <td class="text-center" ><button class="btn btn-info setSource" type="button">setSource</button></td >\
                 <td class="text-center" > <button class="btn btn-danger remove" type="button">Remove</button></td>\
                 <td class="text-center"><button class="btn btn-info addSubRow" type="button">AddSubRow</button></td>\
@@ -467,14 +528,14 @@
                 tr = '\
                 <tr class = "subrow" id=' + trId + '_SubRow' + '>\
                 <td class="text-center" > ' + getSelect('operator') + '</td>\
-                <td class="text-center tdSource" > ' + getSource() + '</td >\
-                <td class="text-center">' + $("#inputAttribute").val() + '</td>\
+                <td class="text-center tdSource" ></td >\
+                <td class="text-center">' + attributeElement + '</select></td>\
                 <td class="text-center">' + getSelect('method') + '</td>\
                 <td class="text-center">' + getSelect('methodText') + '</td>\
                 <td></td>\
                 <td></td>\
                 <td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button></td>\
-                <td class="text-center"><button class="btn btn-info addSubRow" type="button">AddSubRow</button></td>\
+                <td class="text-center"></td>\
                 </tr>';
 
                 return tr;
@@ -482,14 +543,14 @@
         }
 
         //新增條件Row
-        function conditionAppend(trId, type) {           
+        function conditionAppend(trId, type) {
             var thead = '\
 <table class="table table-bordered" style="border:3px #cccccc solid;">\
     <thead >\
         <tr>\
         <th class="text-center">OPERATOR</th>\
         <th class="text-center">SOURCE</th>\
-        <th class="text-center">inputAttribute</th>\
+        <th class="text-center">ATTRIBUTE</th>\
         <th class="text-center">METHOD</th>\
         <th class="text-center">METHOD TEXT</th>\
         <th class="text-center">condition</th>\
@@ -506,10 +567,10 @@
 <tr id=' + trId + '>\
     <td class="text-center" > ' + getSelect('operator') + '</td >\
     <td class="text-center tdSource" > ' + getSource() + '</td >\
-    <td class="text-center">' + $("#inputAttribute").val() + '</td>\
+    <td class="text-center">' + attributeElement + '</select></td>\
     <td class="text-center">' + getSelect('method') + '</td>\
     <td class="text-center">' + getSelect('methodText') + '</td>\
-    <td class="text-center condition"><input type="text"></input></td>\
+    <td class="text-center condition"><input type="text" class="form-control"></input></td>\
     <td class="text-center" ><button class="btn btn-info setCondition" type="button">setCondition</button></td >\
     <td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button></td>\
     <td class="text-center" > <button class="btn btn-info addSubRow" type="button">AddSubRow</button></td>\
@@ -523,8 +584,8 @@
                 tr = '\
 <tr class = "subrow" id=' + trId + '_SubRow' + '>\
     <td class="text-center">' + getSelect('operator') + '</td>\
-    <td class="text-center tdSource">' + getSource() + '</td>\
-    <td class="text-center">' + $("#inputAttribute").val() + '</td>\
+    <td class="text-center tdSource"></td>\
+    <td class="text-center">' + attributeElement + '</select></td>\
     <td class="text-center">' + getSelect('method') + '</td>\
     <td class="text-center">' + getSelect('methodText') + '</td>\
     <td></td>\
@@ -537,52 +598,62 @@
             }
         }
 
+        function logicAppend(Method/*C:變更下拉選單, A:新增列*/, trId) {
+            var sel = $('#sel_logic').val();
+            var tr = '';
+                if (Method == "C") {
+                    tr = '\
+<table>\
+    <tbody id="tbody_logic">\
+        <tr id="ifRow"><td>IF<button id="btnAddLogicIfRow" class="btn btn-info addif" type="button"> + </button></td></tr>\
+        <tr id="thenRow"><td>THEN<button id="btnAddLogicThenRow" class="btn btn-info addthen" type="button"> + </button></td></tr>\
+    </tbody>\
+<table>\
+';
+                }
+                else if (Method == "A") {
+                    tr = '\
+<tr id = "' + trId + '" class = "subrow">\
+<td class="text-center">' + getSelect('operator') + '</td >\
+<td class="text-center" > ' + getCondition() + '</td >\
+<td class="text-center"><button class="btn btn-danger remove" type="button"> - </button></td>\
+</tr>\
+                        ';
+                }
+
+            return tr;
+        }
+
         function getSelect(name) {
             var res = ''
             if (name == 'operator') {
                 res = '\
-                <select id="operator" class="form-control operator">\
-                    <option value = "And">And</option >\
-                    <option value="Or">Or</option>\
-                </select >\
+<select id="operator" class="form-control operator">\
+    <option value = "And">And</option >\
+    <option value="Or">Or</option>\
+</select >\
                 ';
                 return res;
             }
-            else if (name == 'sourceElement') {
-                $.ajax(
-                    {
-                        url: "@Url.Action("getSourceElement", "Home")",
-                        data: { /*element: inputElement*/ },
-                        type: 'post',
-                        cache: false,
-                        async: false,
-                        dataType: 'text',
-                        success: function (res) {
-                            if (res.length > 0) {
-                                sourceElement = res;
-                            }
-                        }
-                    });
-            }
             else if (name == 'method') {
                 res = '\
-                    <select id = "inputMethod" class="form-control" >\
-                        <option value="StartWith">開頭包含</option>\
-                        <option value="EndWith">結尾包含</option>\
-                        <option value="Contain">包含</option>\
-                        <option value="Between">介於</option>\
-                        <option value="Equal">等於</option>\
-                        <option value="NotEqual">不等於</option>\
-                        <option value="NotEqual">大於等於</option>\
-                        <option value="NotEqual">小於等於</option>\
-                </select >\
+<select id = "inputMethod" class="form-control" style="width:auto;">\
+    <option value="StartWith">開頭包含</option>\
+    <option value="EndWith">結尾包含</option>\
+    <option value="Contain">包含</option>\
+    <option value="Between">介於</option>\
+    <option value="Equal">等於</option>\
+    <option value="NotEqual">不等於</option>\
+    <option value="NotEqual">大於等於</option>\
+    <option value="NotEqual">小於等於</option>\
+</select >\
                 ';
                 return res;
             }
             else if (name == 'methodText') {
                 res = '<input type="text" class="form-control">';
                 return res;
-                
+
             }
         }
     </script>
