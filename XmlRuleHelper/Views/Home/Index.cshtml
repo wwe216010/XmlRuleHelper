@@ -117,20 +117,21 @@
     </div>
 
     <br><br>
-    <div id="logic">
-    <h style="color: #006eff; font-size: 30px">SetLOGIC</h>
-    <div class="container pt-4" style="border-color:#006eff;border-width:3px;border-style:solid;padding:5px;">
-        <select id="sel_logic" class="form-control">
-            <option value="N">一般判斷式</option>
-            <option value="IF">IF判斷式</option>
-            <option value="IE">IF..ELSE判斷式</option>
-        </select>
-        <div class="col-md-6">
-            <div class="logicdiv table-responsive">
+        <div id="logic">
+            <h style="color: #006eff; font-size: 30px">SetLOGIC</h>
+            <div class="container pt-4" style="border-color:#006eff;border-width:3px;border-style:solid;padding:5px;">
+                <select id="sel_logic" class="form-control">
+                    <option value="N">一般判斷式</option>
+                    <option value="IF">IF判斷式</option>
+                    <option value="IE">IF..ELSE判斷式</option>
+                </select>
+                <div class="col-md-6">
+                    <div class="logicdiv table-responsive">
+                    </div>
+                </div>
             </div>
+            <button class="btn btn-md btn-primary" id="btnGen" type="button">Gen</button>
         </div>
-    </div>
-    </div>
 }
 
 @section Scripts{
@@ -144,6 +145,7 @@
         var attributeElement = '';
         const arySource = [];
         const aryCondition = [];
+        var resultForEE = '';
 
         $(document).ready(function () {
             //row expand key word => data-toggle="collapse", <a data-toggle="collapse" href="#collapseExample">+</a>
@@ -186,9 +188,9 @@
                     });
 
                     //Head刪除主Row後，有相依的Foot Row也要一併刪除
-                    var source = $(this).closest('tr').find('td[class*="source"]').html();
+                    var source = $(this).closest('tr').find('input[class*="input-source-alias"]').val();
                     if (source.length > 0) {
-                        $('.conditiondiv').find('tr td[class*="tdSource"] select').each(function () {
+                        $('.conditiondiv').find('tr select[class*="sel-source"]').each(function () {
                             if ($(this).val() == source) {
                                 $('.conditiondiv').find('tr button[class*="remove"]').click();
                             }
@@ -218,8 +220,8 @@
                 renameSubRow(parentRowId)
             });
             $('.sourcediv').on('click', '.setSource', function () {
-                if (/*confirm('別名設定後無法變更\n\n請確認！') == true*/1==1) {
-                    var inputSource = $(this).closest('tr').find('td[class*="source"] input').val().trim();
+                if (/*confirm('別名設定後無法變更\n\n請確認！') == true*/1 == 1) {
+                    var inputSource = $(this).closest('tr').find('input[class*="input-source-alias"]').val();
                     //加入源頭條件群組名稱至下拉選單
                     if (inputSource.length > 0) {
                         /*新增下拉選單選項*/
@@ -312,14 +314,14 @@
                         $(this).closest('tbody').find('select').attr('disabled', true);
                         $(this).closest('tbody').find('input').attr('disabled', true);
                         //變更<tbody> ID
-                        $(this).closest('tr').parent('tbody').attr('id', 'TBODY_CONDITION__' + inputSource);
+                        $(this).closest('tr').parent('tbody').attr('id', 'TBODY_CONDITION_' + inputSource);
                     }
                 } else {
                     return;
                 }
             })
-            $('.conditiondiv').on('change', '.selSource', function () {
-                var sel = $(this).closest('tr').find('td[class*="tdSource"] select');
+            $('.conditiondiv').on('change', '.sel-source', function () {
+                var sel = $(this).closest('tr').find('select[class*="sel-source"]');
                 sel.attr("source", sel.val());
             })
 
@@ -412,7 +414,53 @@
                 logicElseRowIndex = 0;
                 $(".logicdiv").find('table').remove();
                 $('.logicdiv').append(logicAppend('C'));
-            })            
+            })   
+            $('#btnGen').on('click', function () {
+                var logicType = $('#sel_logic').val();
+                if (logicType == "N") {
+
+                }
+                else if (logicType == "IF") {
+                    debugger;
+                    $('#tbody_logic').find('tr[id^="oForm_LogicIfRow_"]').each(function () {
+                        $(this).find('td select').each(function () {
+                            if ($(this).hasClass('selCondition')) {
+                                $('#TBODY_CONDITION_' + $(this).val()).find('tr').each(function () {                                 
+                                    $(this).find('td select').each(function () {
+                                        if ($(this).hasClass('sel-operator')) {
+                                            alert($(this).find("option:selected").text());
+                                        }
+                                        if ($(this).hasClass('sel-source')) {                                            
+                                            alert($(this).find("option:selected").text());
+                                        }
+                                        if ($(this).hasClass('sel-node')) {
+                                            alert($(this).find("option:selected").text());
+                                        }
+                                        if ($(this).hasClass('sel-attribute')) {
+                                            alert($(this).find("option:selected").text());
+                                        }
+                                        if ($(this).hasClass('sel-method')) {
+                                            alert($(this).find("option:selected").text());
+                                        }
+                                        if ($(this).hasClass('sel-methodtext')) {
+                                            alert($(this).find("option:selected").text());
+                                        }
+                                    })
+                                })
+                            }
+
+                        })
+                    })
+                    //$('#tbody_logic').find('tr[id^="oForm_LogicThenRow_"]').each(function () {
+                    //    $(this).find('td select').each(function () {
+                    //        alert($(this).val());
+                    //    })
+                    //})
+                }
+                else if (logicType == "IE") {
+
+                }
+            });
 
             $.ajax(
             {
@@ -481,7 +529,7 @@
         function getSource() {
             var res = '';
             if (arySource.length > 0) {
-                res += '<select class="form-control selSource" style="width:auto;">'
+                res += '<select class="form-control sel-source" style="width:auto;">'
                 for (var i = 0; i < arySource.length; i++) {
 
                     res += '<option>' + arySource[i].value + '</Option >'
@@ -513,9 +561,9 @@
                 }
             }
 
-            //$('.selSource').replaceWith(getSource());
-            $('.selSource').each(function () {
+            $('.sel-source').each(function () {
                 var attr = $(this).attr('disabled');
+                //尚未設定規則別名才更新下拉選單，已經設定的就不更新
                 if (typeof attr == typeof undefined) {
                     $(this).replaceWith(getSource());
                 }
@@ -529,7 +577,6 @@
             if (aryCondition.length > 0) {
                 res += '<select class="form-control selCondition" style="width:auto;">'
                 for (var i = 0; i < aryCondition.length; i++) {
-
                     res += '<option title="' + aryCondition[i].tooltips+ '">' + aryCondition[i].value + '</Option >'
                 }
                 res += '</select>'
@@ -594,7 +641,7 @@
                 <td class="text-center">' + attributeElement+ '</select></td>\
                 <td class="text-center">' + getSelect('method') + '</td>\
                 <td class="text-center">' + getSelect('methodText') + '</td>\
-                <td class="text-center source"><input type="text" class="form-control"></input></td>\
+                <td class="text-center"><input type="text" class="form-control input-source-alias"></input></td>\
                 <td class="text-center" ><button class="btn btn-info setSource" type="button">setSource</button></td >\
                 <td class="text-center" > <button class="btn btn-danger remove" type="button">Remove</button></td>\
                 <td class="text-center"><button class="btn btn-info addSubRow" type="button">AddSubRow</button></td>\
@@ -605,8 +652,8 @@
             else {
                 tr = '\
                 <tr class = "subrow" id=' + trId + '_SubRow' + '>\
-                <td class="text-center" > ' + getSelect('operator') + '</td>\
-                <td class="text-center tdSource" ></td >\
+                <td class="text-center"> ' + getSelect('operator') + '</td>\
+                <td class="text-center"></td >\
                 <td class="text-center">' + attributeElement + '</select></td>\
                 <td class="text-center">' + getSelect('method') + '</td>\
                 <td class="text-center">' + getSelect('methodText') + '</td>\
@@ -645,7 +692,7 @@
                 tr = '\
 <tr id=' + trId + '>\
     <td class="text-center" > ' + getSelect('operator') + '</td >\
-    <td class="text-center tdSource" > ' + getSource() + '</td >\
+    <td class="text-center" > ' + getSource() + '</td >\
     <td class="text-center" > ' + getSelect('node') + '</td >\
     <td class="text-center">' + attributeElement + '</select></td>\
     <td class="text-center">' + getSelect('method') + '</td>\
@@ -664,7 +711,7 @@
                 tr = '\
 <tr class = "subrow" id=' + trId + '_SubRow' + '>\
     <td class="text-center">' + getSelect('operator') + '</td>\
-    <td class="text-center tdSource" > ' + getSource() + '</td >\
+    <td class="text-center" > ' + getSource() + '</td >\
     <td class="text-center" > ' + getSelect('node') + '</td >\
     <td class="text-center">' + attributeElement + '</select></td>\
     <td class="text-center">' + getSelect('method') + '</td>\
@@ -724,16 +771,16 @@
             var res = ''
             if (name == 'operator') {
                 res = '\
-<select id="operator" class="form-control operator">\
-    <option value = "And">And</option >\
-    <option value="Or">Or</option>\
+<select class="form-control sel-operator">\
+    <option value = "And">並且</option >\
+    <option value="Or">或</option>\
 </select >\
                 ';
                 return res;
             }
             else if (name == 'method') {
                 res = '\
-<select id = "inputMethod" class="form-control" style="width:auto;">\
+<select class="form-control sel-method" style="width:auto;">\
     <option value="StartWith">開頭包含</option>\
     <option value="StartNoneWith">開頭不包含</option>\
     < option value = "EndWith" > 結尾包含</option >\
@@ -749,13 +796,13 @@
                 return res;
             }
             else if (name == 'methodText') {
-                res = '<input type="text" class="form-control">';
+                res = '<input type="text" class="form-control input-methodtext">';
                 return res;
 
             }
             else if (name == 'node') {
                 res = '\
-<select id = "inputNode" class="form-control" style="width:auto;">\
+<select class="form-control sel-node" style="width:auto;">\
     <option value="A">全部元件</option>\
     <option value="S">起始元件</option>\
     <option value="R">中間元件</option>\
