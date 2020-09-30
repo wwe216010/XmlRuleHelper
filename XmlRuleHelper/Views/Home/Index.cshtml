@@ -117,21 +117,20 @@
     </div>
 
     <br><br>
-        <div id="logic">
-            <h style="color: #006eff; font-size: 30px">SetLOGIC</h>
-            <div class="container pt-4" style="border-color:#006eff;border-width:3px;border-style:solid;padding:5px;">
-                <select id="sel_logic" class="form-control">
-                    <option value="N">一般判斷式</option>
-                    <option value="IF">IF判斷式</option>
-                    <option value="IE">IF..ELSE判斷式</option>
-                </select>
-                <div class="col-md-6">
-                    <div class="logicdiv table-responsive">
-                    </div>
-                </div>
+    <div id="logic">
+    <h style="color: #006eff; font-size: 30px">SetLOGIC</h>
+    <div class="container pt-4" style="border-color:#006eff;border-width:3px;border-style:solid;padding:5px;">
+        <select id="sel_logic" class="form-control">
+            <option value="N">一般判斷式</option>
+            <option value="IF">IF判斷式</option>
+            <option value="IE">IF..ELSE判斷式</option>
+        </select>
+        <div class="col-md-6">
+            <div class="logicdiv table-responsive">
             </div>
-            <button class="btn btn-md btn-primary" id="btnAddConditionRow" type="button">新增條件</button>
         </div>
+    </div>
+    </div>
 }
 
 @section Scripts{
@@ -139,6 +138,8 @@
         var SourceRowIdTitle = 'oForm_SourceRow_';
         var ConditionRowIdTitle = 'oForm_ConditionRow_';
         var LogicIfRowIdTitle = 'oForm_LogicIfRow_';
+        var LogicThenRowIdTitle = 'oForm_LogicThenRow_';
+        var LogicElseRowIdTitle = 'oForm_LogicElseRow_';
         var sourceElement = '';
         var attributeElement = '';
         const arySource = [];
@@ -150,6 +151,8 @@
             var sourceRowIndex = 0;
             var conditionRowIndex = 0;
             var logicIfRowIndex = 0;
+            var logicThenRowIndex = 0;
+            var logicElseRowIndex = 0;
 
 
             /******來源區塊*****/
@@ -215,7 +218,7 @@
                 renameSubRow(parentRowId)
             });
             $('.sourcediv').on('click', '.setSource', function () {
-                if (confirm('別名設定後無法變更\n\n請確認！') == true) {
+                if (/*confirm('別名設定後無法變更\n\n請確認！') == true*/1==1) {
                     var inputSource = $(this).closest('tr').find('td[class*="source"] input').val().trim();
                     //加入源頭條件群組名稱至下拉選單
                     if (inputSource.length > 0) {
@@ -230,7 +233,7 @@
                         $(this).closest('tbody').find('select').attr('disabled', true);
                         $(this).closest('tbody').find('input').attr('disabled', true);
                         //變更<tbody> ID
-                        $(this).closest('tr').parent('tbody').attr('id', 'tbody_' + inputSource);
+                        $(this).closest('tr').parent('tbody').attr('id', 'TBODY_SOURCE_' + inputSource);
                     }
                 } else {
                     return ;
@@ -293,7 +296,7 @@
                 renameSubRow(parentRowId)
             });
             $('.conditiondiv').on('click', '.setCondition', function () {
-                if (confirm('別名設定後無法變更\n\n請確認！') == true) {
+                if (/*confirm('別名設定後無法變更\n\n請確認！') == true*/1==1) {
                     var inputSource = $(this).closest('tr').find('td[class*="condition"] input').val().trim();
                     //加入源頭條件群組名稱至下拉選單
                     if (inputSource.length > 0) {
@@ -309,7 +312,7 @@
                         $(this).closest('tbody').find('select').attr('disabled', true);
                         $(this).closest('tbody').find('input').attr('disabled', true);
                         //變更<tbody> ID
-                        $(this).closest('tr').parent('tbody').attr('id', 'tbody_' + inputSource);
+                        $(this).closest('tr').parent('tbody').attr('id', 'TBODY_CONDITION__' + inputSource);
                     }
                 } else {
                     return;
@@ -322,17 +325,91 @@
 
 
             /******邏輯組合區塊*****/
+            /*IF SCOPE*/
             $('.logicdiv').on('click', '.addif', function () {
-                var trId = LogicIfRowIdTitle + '1';
-                $('.logicdiv').find('#ifRow').after(logicAppend('A', trId));
-                renameSubRow(trId)
+                logicIfRowIndex++;
+                var preTrId = LogicIfRowIdTitle + (logicIfRowIndex - 1)
+                var trId = LogicIfRowIdTitle + logicIfRowIndex;
+                if (logicIfRowIndex == 1) {
+                    $('.logicdiv').find('#ifRow').after(logicAppend('A', trId));
+                }
+                else {
+                    $('#' + preTrId).after(logicAppend('A', trId));
+                }                
+                setFirstTd(LogicIfRowIdTitle + '1');
             });
+            $('.logicdiv').on('click', '.addthen', function () {
+                logicThenRowIndex++;
+                var preTrId = LogicThenRowIdTitle + (logicThenRowIndex - 1)
+                var trId = LogicThenRowIdTitle + logicThenRowIndex;
+                if (logicThenRowIndex == 1) {
+                    $('.logicdiv').find('#thenRow').after(logicAppend('A', trId));
+                }
+                else {
+                    $('#' + preTrId).after(logicAppend('A', trId));
+                }
+                setFirstTd(LogicThenRowIdTitle + '1');
+                //renameSubRow(trId);
+            });
+            $('.logicdiv').on('click', '.addelse', function () {
+                logicElseRowIndex++;
+                var preTrId = LogicElseRowIdTitle + (logicElseRowIndex - 1)
+                var trId = LogicElseRowIdTitle + logicElseRowIndex;
+                if (logicElseRowIndex == 1) {
+                    $('.logicdiv').find('#elseRow').after(logicAppend('A', trId));
+                }
+                else {
+                    $('#' + preTrId).after(logicAppend('A', trId));
+                }
+                setFirstTd(LogicElseRowIdTitle + '1');
+                //renameSubRow(trId);
+            });
+            $('.logicdiv').on('click', '.remove', function () {
+                var currentTrId = $(this).closest('tr').attr('id');
+                var removeType = '';
+                var sub = 0;
+                var title = '';
+
+                if (currentTrId.indexOf('If') != -1) {
+                    logicIfRowIndex--;
+                    removeType = 'oForm_LogicIfRow';
+                    sub = 17;//從index17開始取id編號
+                    title = LogicIfRowIdTitle;
+                }
+                else if (currentTrId.indexOf('Then') != -1) {
+                    logicThenRowIndex--;
+                    removeType = 'oForm_LogicThenRow';
+                    sub = 19;//從index19開始取id編號
+                    title = LogicThenRowIdTitle;
+                }
+                else if (currentTrId.indexOf('Else') != -1) {
+                    logicElseRowIndex--;
+                    removeType = 'oForm_LogicElseRow';
+                    sub = 19;
+                    title = LogicElseRowIdTitle;
+                }
+
+                var child = $(this).closest('tr').nextAll();
+                child.each(function () {
+                    debugger;
+                    if ($(this).attr('id').indexOf(removeType) != -1) {
+                        var id = $(this).attr('id');                        
+                        var dig = parseInt(id.substring(sub));
+                        $(this).attr('id', `${title}${dig - 1}`);
+                    }
+                })
+                $(this).closest('tr').remove();
+                setFirstTd(title + '1');
+            })
             $('#sel_logic').on('change', function () {
                 if (aryCondition.length <= 0) {
-                    alert('qqq~');
+                    alert('請先設定條件別名!');
                     return;
                 }
 
+                logicIfRowIndex = 0;
+                logicThenRowIndex = 0;
+                logicElseRowIndex = 0;
                 $(".logicdiv").find('table').remove();
                 $('.logicdiv').append(logicAppend('C'));
             })            
@@ -453,7 +530,7 @@
                 res += '<select class="form-control selCondition" style="width:auto;">'
                 for (var i = 0; i < aryCondition.length; i++) {
 
-                    res += '<option title="ass~">' + aryCondition[i].value + '</Option >'
+                    res += '<option title="' + aryCondition[i].tooltips+ '">' + aryCondition[i].value + '</Option >'
                 }
                 res += '</select>'
             }
@@ -471,7 +548,8 @@
 
                 aryCondition.push({
                     key: condition,
-                    value: condition
+                    value: condition,
+                    tooltips: 'THIS IS RULE' + condition + '!!!!!'
                 });
             }
             else if (type == "R") {
@@ -550,6 +628,7 @@
         <tr>\
         <th class="text-center">OPERATOR</th>\
         <th class="text-center">SOURCE</th>\
+        <th class="text-center">NODE</th>\
         <th class="text-center">ATTRIBUTE</th>\
         <th class="text-center">METHOD</th>\
         <th class="text-center">METHOD TEXT</th>\
@@ -567,6 +646,7 @@
 <tr id=' + trId + '>\
     <td class="text-center" > ' + getSelect('operator') + '</td >\
     <td class="text-center tdSource" > ' + getSource() + '</td >\
+    <td class="text-center" > ' + getSelect('node') + '</td >\
     <td class="text-center">' + attributeElement + '</select></td>\
     <td class="text-center">' + getSelect('method') + '</td>\
     <td class="text-center">' + getSelect('methodText') + '</td>\
@@ -584,7 +664,8 @@
                 tr = '\
 <tr class = "subrow" id=' + trId + '_SubRow' + '>\
     <td class="text-center">' + getSelect('operator') + '</td>\
-    <td class="text-center tdSource"></td>\
+    <td class="text-center tdSource" > ' + getSource() + '</td >\
+    <td class="text-center" > ' + getSelect('node') + '</td >\
     <td class="text-center">' + attributeElement + '</select></td>\
     <td class="text-center">' + getSelect('method') + '</td>\
     <td class="text-center">' + getSelect('methodText') + '</td>\
@@ -600,22 +681,37 @@
 
         function logicAppend(Method/*C:變更下拉選單, A:新增列*/, trId) {
             var sel = $('#sel_logic').val();
+            var tbody = '';
+            var subrowName = '';
+
+            if (sel == "N") {
+                tbody = '\
+<tr id="ifRow"><td><button id="btnAddLogicNormalRow" class="btn btn-info addif" type="button"> + </button></td></tr>\
+';
+            }
+            else if (sel == "IF") {
+                tbody = '\
+<tr id="ifRow"><td>IF</td><td><button id="btnAddLogicIfRow" class="btn btn-info addif" type="button"> + </button></td></tr>\
+<tr id="thenRow"><td>THEN</td><td><button id="btnAddLogicThenRow" class="btn btn-info addthen" type="button"> + </button></td></tr>\
+';
+            }
+            else if (sel == "IE") {
+                tbody = '\
+<tr id="ifRow"><td>IF</td><td><button id="btnAddLogicIfRow" class="btn btn-info addif" type="button"> + </button></td></tr>\
+<tr id="thenRow"><td>THEN</td><td><button id="btnAddLogicThenRow" class="btn btn-info addthen" type="button"> + </button></td></tr>\
+<tr id="elseRow"><td>ELSE</td><td><button id="btnAddLogicElseRow" class="btn btn-info addelse" type="button"> + </button></td></tr>\
+';
+            }
+
             var tr = '';
                 if (Method == "C") {
-                    tr = '\
-<table>\
-    <tbody id="tbody_logic">\
-        <tr id="ifRow"><td>IF<button id="btnAddLogicIfRow" class="btn btn-info addif" type="button"> + </button></td></tr>\
-        <tr id="thenRow"><td>THEN<button id="btnAddLogicThenRow" class="btn btn-info addthen" type="button"> + </button></td></tr>\
-    </tbody>\
-<table>\
-';
+                    tr = '<table><tbody id = "tbody_logic">' +tbody+ '</tbody><table>';
                 }
                 else if (Method == "A") {
                     tr = '\
 <tr id = "' + trId + '" class = "subrow">\
-<td class="text-center">' + getSelect('operator') + '</td >\
-<td class="text-center" > ' + getCondition() + '</td >\
+<td class="text-center"> ' + getSelect('operator') + '</td >\
+<td class="text-center"> ' + getCondition() + '</td >\
 <td class="text-center"><button class="btn btn-danger remove" type="button"> - </button></td>\
 </tr>\
                         ';
@@ -639,8 +735,10 @@
                 res = '\
 <select id = "inputMethod" class="form-control" style="width:auto;">\
     <option value="StartWith">開頭包含</option>\
-    <option value="EndWith">結尾包含</option>\
+    <option value="StartNoneWith">開頭不包含</option>\
+    < option value = "EndWith" > 結尾包含</option >\
     <option value="Contain">包含</option>\
+    <option value="NoneContain">不包含</option>\
     <option value="Between">介於</option>\
     <option value="Equal">等於</option>\
     <option value="NotEqual">不等於</option>\
@@ -654,6 +752,17 @@
                 res = '<input type="text" class="form-control">';
                 return res;
 
+            }
+            else if (name == 'node') {
+                res = '\
+<select id = "inputNode" class="form-control" style="width:auto;">\
+    <option value="A">全部元件</option>\
+    <option value="S">起始元件</option>\
+    <option value="R">中間元件</option>\
+    <option value="S">末端元件</option>\
+</select >\
+                ';
+                return res;
             }
         }
     </script>

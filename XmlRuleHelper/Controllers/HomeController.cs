@@ -53,6 +53,7 @@ namespace XmlRuleHelper.Controllers
             IEnumerable<XElement> data = from c in purchaseOrder.Descendants() select c;
             var qq = data.OfType<XElement>().Attributes().Select(c => c.Name.LocalName).OrderBy(c => c.ToString());
             resJson += "<select id = \"inputAttribute\" class = \"form-control\" style=\"width:auto;\">";
+            resJson += "<option value=\"TagName\">元件名稱</option>";
             foreach (var itemAttr in qq.Distinct())
             {
                 resJson += string.Format("<option value=\"{0}\">{1}</option>", itemAttr, itemAttr);
