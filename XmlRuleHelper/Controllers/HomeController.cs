@@ -19,6 +19,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Web.Script.Serialization;
 
+using System.Configuration;
+using System.Threading.Tasks;
+using Azure;
+using Azure.Storage;
+using Azure.Storage.Blobs;
+using Azure.Storage.Files.Shares;
+using Azure.Storage.Files.Shares.Models;
+using Azure.Storage.Sas;
+using Microsoft.Azure.Storage.Blob;
 
 namespace XmlRuleHelper.Controllers
 {
@@ -28,22 +37,73 @@ namespace XmlRuleHelper.Controllers
 
         public ActionResult Index()
         {
-            //Get XML Content
-            var currentDirectory = System.IO.Directory.GetCurrentDirectory();
-            var purchaseOrderFilepath = "C:\\xmlHelper\\xmlHelper\\xmlHelper\\bin\\Debug\\HELLCAT13_TGL_U_X00_MB_20191227.xml";//Path.Combine(currentDirectory, "HELLCAT13_TGL_U_X00_MB_20191227.xml");//改手動匯入
-            purchaseOrder = XElement.Load(purchaseOrderFilepath);
-
-            List<SelectListItem> inputElement = new List<SelectListItem>();
-            string sourceElement = string.Empty;
-            sourceElement += "<select class = \"form - control\">";
-            foreach (var item in purchaseOrder.Elements().OfType<XElement>().Select(x => x.Name).Distinct())
+            try
             {
-                //inputElement.Add(new SelectListItem() { Text = item.ToString(), Value = item.ToString() });
-                sourceElement += string.Format("<option value=\"{0}\">{1}</option>", item.ToString(), item.ToString());
+                var purchaseOrderFilepath = Path.Combine(Server.MapPath("~\\App_Data\\"), "HELLCAT13_TGL_U_X00_MB_20191227.xml");//"C:\\xmlHelper\\xmlHelper\\xmlHelper\\bin\\Debug\\HELLCAT13_TGL_U_X00_MB_20191227.xml";//Path.Combine(currentDirectory, "HELLCAT13_TGL_U_X00_MB_20191227.xml");//改手動匯入
+                purchaseOrder = XElement.Load(purchaseOrderFilepath);
+
+                List<SelectListItem> inputElement = new List<SelectListItem>();
+                string sourceElement = string.Empty;
+                sourceElement += "<select class = \"form - control\">";
+                foreach (var item in purchaseOrder.Elements().OfType<XElement>().Select(x => x.Name).Distinct())
+                {
+                    //inputElement.Add(new SelectListItem() { Text = item.ToString(), Value = item.ToString() });
+                    sourceElement += string.Format("<option value=\"{0}\">{1}</option>", item.ToString(), item.ToString());
+                }
+                sourceElement += "</select>";
+                ViewBag.sourceElement = HttpUtility.HtmlDecode(sourceElement);//inputElement;
+                return View();
             }
-            sourceElement += "</select>";
-            ViewBag.sourceElement = HttpUtility.HtmlDecode(sourceElement);//inputElement;
-            return View();
+            catch (Exception e)
+            {
+                return Content(e.ToString());
+            }
+
+            ////Dowload XML From Azure File Storage(Has file access deny Issue!!!)
+            //string connectionString = @"DefaultEndpointsProtocol=https;AccountName=kikikokoazurestorage;AccountKey=jinDMgNi4n3x5TI0nOFcmSYr/cSdgUwPMQz86WwA6Z1XnNgTTLnzQG2rL5v1Qb1B03oL4xLbAYB1CQjKw47KIQ==;EndpointSuffix=core.windows.net";
+            //string fileName = "HELLCAT13_TGL_U_X00_MB_20191227.xml";
+            //string localPath = string.Format("D:\\WistronXmlRuleHelper\\xmls");
+            //string fullFileName = string.Empty;
+            //ShareClient share = new ShareClient(connectionString, "wistronfiles");
+            //share.CreateIfNotExistsAsync();
+            //if (share.Exists())
+            //{
+            //    ShareDirectoryClient cloudDirectory = share.GetDirectoryClient("xmls");
+            //    ShareFileClient file = cloudDirectory.GetFileClient(fileName);
+            //    if (file.Exists())
+            //    {
+            //        try
+            //        {
+            //            ShareFileDownloadInfo download = file.Download();
+            //            //Save the data to a local file, overwrite if the file already exists
+            //            if (!Directory.Exists(localPath))
+            //            {
+            //                try
+            //                {
+            //                    Directory.CreateDirectory(localPath);
+            //                }
+            //                catch (Exception e)
+            //                {
+            //                    return Content(e.ToString());
+            //                }
+            //            }
+            //            fullFileName = localPath + fileName;
+            //            using (FileStream stream = System.IO.File.OpenWrite(fullFileName))
+            //            {
+            //                download.Content.CopyTo(stream);
+            //                stream.Flush();
+            //                stream.Close();
+
+            //                // Display where the file was saved
+            //                Console.WriteLine($"File downloaded: {stream.Name}");
+            //            }
+            //        }
+            //        catch (Exception e)
+            //        {
+            //            return Content(e.ToString());
+            //        }
+            //    }
+            //}
         }
 
         [HttpPost]
@@ -99,5 +159,21 @@ namespace XmlRuleHelper.Controllers
             }
             return sourceElement;
         }
+
+        //public static Microsoft.Azure.Storage.Blob.cloudstora .CloudBlockBlob GetAzureBlob(string containername, string filename)
+        //{
+        //    var creds = ConfigurationManager.AppSettings["azurestorageconn"];
+        //    var azureStorage = Microsoft.Azure.Storage.CloudStorageAccount.Parse(creds);
+        //    var client = azureStorage.CreateCloudBlobClient();
+        //    //create a blob container and make it publicly accessibile
+        //    var baseContainer = client.GetContainerReference(containername);
+        //    baseContainer.CreateIfNotExists();
+        //    baseContainer.SetPermissions(new BlobContainerPermissions()
+        //    {
+        //        PublicAccess = BlobContainerPublicAccessType.Blob
+        //    });
+        //    var blob = baseContainer.GetBlockBlobReference(filename);
+        //    return blob;
+        //}
     }
 }
