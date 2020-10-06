@@ -45,7 +45,7 @@ namespace XmlRuleHelper.Controllers
                 List<SelectListItem> inputElement = new List<SelectListItem>();
                 string sourceElement = string.Empty;
                 sourceElement += "<select class = \"form - control\">";
-                foreach (var item in purchaseOrder.Elements().OfType<XElement>().Select(x => x.Name).Distinct())
+                foreach (var item in purchaseOrder.Elements().OfType<XElement>().Select(c => c.Name).Distinct())
                 {
                     //inputElement.Add(new SelectListItem() { Text = item.ToString(), Value = item.ToString() });
                     sourceElement += string.Format("<option value=\"{0}\">{1}</option>", item.ToString(), item.ToString());
@@ -133,20 +133,8 @@ namespace XmlRuleHelper.Controllers
             string sourceElement = "";
             try
             {
-                //List<Dictionary<string, string>> dicList = new List<Dictionary<string, string>>();                
-                //Dictionary<string, string> dic = null;
-                //foreach (var item in purchaseOrder.Elements().OfType<XElement>().Select(x => x.Name).Distinct())
-                //{
-                //    dic = new Dictionary<string, string>();
-                //    dic.Add("KEY", item.ToString());
-                //    dic.Add("TEXT", item.ToString());
-                //    dicList.Add(dic);
-                //}
-                //JavaScriptSerializer jss = new JavaScriptSerializer();
-                //res = jss.Serialize(dicList);
-                //return res;
                 sourceElement += "<select class = \"form-control sel-source-element\" style=\"width:auto;\">";
-                foreach (var item in purchaseOrder.Elements().OfType<XElement>().Select(x => x.Name).Distinct())
+                foreach (var item in purchaseOrder.Elements().OfType<XElement>().Select(x => x.Name).Where(c => c.LocalName != "Profile").Distinct())
                 {
                     //inputElement.Add(new SelectListItem() { Text = item.ToString(), Value = item.ToString() });
                     sourceElement += string.Format("<option value=\"{0}\">{1}</option>", item.ToString(), item.ToString());
@@ -159,21 +147,5 @@ namespace XmlRuleHelper.Controllers
             }
             return sourceElement;
         }
-
-        //public static Microsoft.Azure.Storage.Blob.cloudstora .CloudBlockBlob GetAzureBlob(string containername, string filename)
-        //{
-        //    var creds = ConfigurationManager.AppSettings["azurestorageconn"];
-        //    var azureStorage = Microsoft.Azure.Storage.CloudStorageAccount.Parse(creds);
-        //    var client = azureStorage.CreateCloudBlobClient();
-        //    //create a blob container and make it publicly accessibile
-        //    var baseContainer = client.GetContainerReference(containername);
-        //    baseContainer.CreateIfNotExists();
-        //    baseContainer.SetPermissions(new BlobContainerPermissions()
-        //    {
-        //        PublicAccess = BlobContainerPublicAccessType.Blob
-        //    });
-        //    var blob = baseContainer.GetBlockBlobReference(filename);
-        //    return blob;
-        //}
     }
 }
