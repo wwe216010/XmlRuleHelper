@@ -6,25 +6,25 @@
     <h style="color:#ff0000; font-size:30px">Set SOURCE(xml level:3)</h>
     <div class="container pt-4" style="border-color:#ff0000;border-width:3px;border-style:solid;padding:5px;">
         <div class="sourcediv table-responsive">
-            @*<table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th class="text-center">inputOperator</th>
-                            <th class="text-center">inputElement</th>
-                            <th class="text-center">inputAttribute</th>
-                            <th class="text-center">inputMethod</th>
-                            <th class="text-center">inputMethodText</th>
-                            <th class="text-center">HeadGroupName</th>
-                            <th class="text-center">resultName</th>
-                            <th class="text-center">Remove Row</th>
-                            <th class="text-center">Add SubRow</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbodyHead">
-                    </tbody>
-                </table>*@
+                @*<table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center">inputOperator</th>
+                        <th class="text-center">inputElement</th>
+                        <th class="text-center">inputAttribute</th>
+                        <th class="text-center">inputMethod</th>
+                        <th class="text-center">inputMethodText</th>
+                        <th class="text-center">HeadGroupName</th>
+                        <th class="text-center">resultName</th>
+                        <th class="text-center">Remove Row</th>
+                        <th class="text-center">Add SubRow</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyHead">
+                </tbody>
+            </table>*@
+            </div>
         </div>
-    </div>
     <button class="btn btn-md btn-primary" id="btnAddSourceRow" type="button">新增來源</button>
     </div>
 
@@ -74,11 +74,11 @@
 
 @section Scripts{
     <script>
-        var SourceRowIdTitle = 'oForm_SourceRow_';
-        var ConditionRowIdTitle = 'oForm_ConditionRow_';
-        var LogicIfRowIdTitle = 'oForm_LogicIfRow_';
-        var LogicThenRowIdTitle = 'oForm_LogicThenRow_';
-        var LogicElseRowIdTitle = 'oForm_LogicElseRow_';
+        const SourceRowIdTitle = 'oForm_SourceRow_';
+        const ConditionRowIdTitle = 'oForm_ConditionRow_';
+        const LogicIfRowIdTitle = 'oForm_LogicIfRow_';
+        const LogicThenRowIdTitle = 'oForm_LogicThenRow_';
+        const LogicElseRowIdTitle = 'oForm_LogicElseRow_';
         var sourceElement = '';
         var attributeElement = '';
         const arySource = [];
@@ -87,7 +87,6 @@
 
         $(document).ready(function () {
             //row expand key word => data-toggle="collapse", <a data-toggle="collapse" href="#collapseExample">+</a>
-            //ChangeAttributeReplaceWith();
             var sourceRowIndex = 0;
             var conditionRowIndex = 0;
             var logicIfRowIndex = 0;
@@ -161,12 +160,11 @@
             });
             $('.sourcediv').on('click', '.setSource', function () {
                 if (/*confirm('別名設定後無法變更\n\n請確認！') == true*/1 == 1) {
-                    //檢查規則參數是否填寫
-                    var inputMethod = $(this).closest('tr').find('select[class*="sel-method"]').val();
-                    var inputMethodText = $(this).closest('tr').find('input[class*="input-methodtext"]').val();
-                    if ((inputMethod != "Empty" && inputMethod != "NotEmpty") && inputMethodText.length <= 0) {
-                        alert('規則參數必填!!!'); return;
-                    }  
+                    //檢查行為參數是否填寫
+                    let methodTextCheck_ = methodTextCheck($(this));
+                    if (methodTextCheck_.length >= 1) {
+                        alert(methodTextCheck_); return;
+                    }
 
                     var inputSource = $(this).closest('tr').find('input[class*="input-source-alias"]').val();
                     //加入源頭條件群組名稱至下拉選單
@@ -195,6 +193,9 @@
                 } else {
                     return ;
                 }
+            })
+            $('.sourcediv').on('change', '.sel-method', function () {
+                changeMethod($(this).closest('tr'));
             })
 
 
@@ -252,10 +253,10 @@
             });
             $('.conditiondiv').on('click', '.setCondition', function () {
                 if (/*confirm('別名設定後無法變更\n\n請確認！') == true*/1 == 1) {
-                    var inputMethod = $(this).closest('tr').find('select[class*="sel-method"]').val();
-                    var inputMethodText = $(this).closest('tr').find('input[class*="input-methodtext"]').val();
-                    if ((inputMethod != "Empty" && inputMethod != "NotEmpty") && inputMethodText.length <= 0) {
-                        alert('規則參數必填!!!'); return;
+                    //檢查行為參數是否填寫
+                    let methodTextCheck_ = methodTextCheck($(this));
+                    if (methodTextCheck_.length >= 1) {
+                        alert(methodTextCheck_); return;
                     }
 
                     var inputCondition = $(this).closest('tr').find('td[class*="condition"] input').val().trim();
@@ -298,6 +299,9 @@
             $('.conditiondiv').on('change', '.sel-source', function () {
                 var sel = $(this).closest('tr').find('select[class*="sel-source"]');
                 sel.attr("source", sel.val());
+            })
+            $('.conditiondiv').on('change', '.sel-method', function () {
+                changeMethod($(this).closest('tr'));
             })
 
 
@@ -594,11 +598,11 @@
             var thead = '<table class="table table-bordered" style="border:3px #cccccc solid;">\
                 <thead>\
                     <tr>\
-                        <th class="text-center" style="width:auto; white-space: nowrap;">運算子</th>\
+                        <th class="text-center" style="width:10%; white-space: nowrap;">運算子</th>\
                         <th class="text-center">元件</th>\
                         <th class="text-center">屬性</th>\
-                        <th class="text-center">規則</th>\
-                        <th class="text-center">規則參數</th>\
+                        <th class="text-center">行為</th>\
+                        <th class="text-center">行為參數</th>\
                         <th class="text-center">來源別名</th>\
                         <th class="text-center"></th>\
                         <th class="text-center"></th>\
@@ -617,9 +621,9 @@
                 <td class="text-center">' + getSelect('method') + '</td>\
                 <td class="text-center">' + getSelect('methodText') + '</td>\
                 <td class="text-center"><input type="text" class="form-control input-source-alias" onkeyup="this.value = this.value.toUpperCase();"></input></td>\
-                <td class="text-center" ><button class="btn btn-info setSource" type="button">setSource</button></td >\
-                <td class="text-center" > <button class="btn btn-danger remove" type="button">Remove</button></td>\
-                <td class="text-center"><button class="btn btn-info addSubRow" type="button">AddSubRow</button></td>\
+                <td class="text-center" ><button class="btn btn-success setSource" type="button">setSource</button></td >\
+                <td class="text-center" > <button class="btn btn-danger remove" type="button">-</button></td>\
+                <td class="text-center"><button class="btn btn-info addSubRow" type="button">+</button></td>\
                 </tr></tbody></table>';
 
                 return thead + tr
@@ -634,7 +638,7 @@
                 <td class="text-center">' + getSelect('methodText') + '</td>\
                 <td></td>\
                 <td></td>\
-                <td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button></td>\
+                <td class="text-center"><button class="btn btn-danger remove" type="button">-</button></td>\
                 <td class="text-center"></td>\
                 </tr>';
 
@@ -648,12 +652,12 @@
 <table class="table table-bordered" style="border:3px #cccccc solid;">\
     <thead>\
         <tr>\
-        <th class="text-center" style="width:auto; white-space: nowrap;">運算子</th>\
+        <th class="text-center" style="width:10%; white-space: nowrap;">運算子</th>\
         <th class="text-center">來源</th>\
         <th class="text-center">節點</th>\
         <th class="text-center">屬性</th>\
-        <th class="text-center">規則</th>\
-        <th class="text-center">規則參數</th>\
+        <th class="text-center">行為</th>\
+        <th class="text-center">行為參數</th>\
         <th class="text-center">規則別名</th>\
         <th class="text-center"></th>\
         <th class="text-center"></th>\
@@ -673,9 +677,9 @@
     <td class="text-center">' + getSelect('method') + '</td>\
     <td class="text-center">' + getSelect('methodText') + '</td>\
     <td class="text-center condition"><input type="text" class="form-control" onkeyup="this.value = this.value.toUpperCase();"></input></td>\
-    <td class="text-center" ><button class="btn btn-info setCondition" type="button">setCondition</button></td >\
-    <td class="text-center"><button class="btn btn-danger remove" type="button">Remove</button></td>\
-    <td class="text-center" > <button class="btn btn-info addSubRow" type="button">AddSubRow</button></td>\
+    <td class="text-center" ><button class="btn btn-success setCondition" type="button">setCondition</button></td >\
+    <td class="text-center"><button class="btn btn-danger remove" type="button">-</button></td>\
+    <td class="text-center" > <button class="btn btn-info addSubRow" type="button">+</button></td>\
 </tr >\
 </thead>\
 <tbody>';
@@ -693,7 +697,7 @@
     <td class="text-center">' + getSelect('methodText') + '</td>\
     <td></td>\
     <td></td>\
-    <td class="text-center" > <button class="btn btn-danger remove" type="button">Remove</button></td >\
+    <td class="text-center" > <button class="btn btn-danger remove" type="button">-</button></td >\
     <td></td>\
 </tr >';
 
@@ -769,6 +773,7 @@
     <option value="NotEmpty">不等於空白</option>\
     <option value="NotEqual">大於等於</option>\
     <option value="NotEqual">小於等於</option>\
+    <option value="Rex">陣則表達式</option>\
 </select >\
                 ';
                 return res;
@@ -782,7 +787,8 @@
                 res = '\
 <select class="form-control sel-node" style="width:auto;">\
     <option value="H">起始元件</option>\
-    <option value="R">中間元件</option>\
+    <option value="R">中間元件(含Sink)</option>\
+    <option value="R">中間元件(不含Sink)</option>\
     <option value="S">末端元件</option>\
 </select >\
                 ';
@@ -898,6 +904,35 @@
                 }
             }
             return res;
+        }
+
+        //行為參數檢核
+        function methodTextCheck(item) {
+            let res = '';
+            item.closest('tbody').find('tr').not('head tr').each(function () {
+                let currentRow = $(this)
+                let inputMethod = currentRow.find('select[class*="sel-method"]').val();
+                let inputMethodText = currentRow.find('input[class*="input-methodtext"]').val();
+                if ((inputMethod != "Empty" && inputMethod != "NotEmpty") && inputMethodText.length <= 0) {
+                    res = '行為參數必填!!!';
+                    return res;
+                }
+            })
+
+            return res;
+        }
+
+        //行為下拉選單行為綁定
+        function changeMethod(item) {
+            let currentMethod = item.find('select[class*="sel-method"] option:selected');
+            let currentMethodText = item.find('input[class*="input-methodtext"]');
+            if (currentMethod.val() == "Empty" || currentMethod.val() == "NotEmpty") {
+                currentMethodText.val('');
+                currentMethodText.attr('disabled', true);
+            }
+            else {
+                currentMethodText.attr('disabled', false);
+            }
         }
 
         //規則物件CLASS
