@@ -58,7 +58,7 @@
     <div id="logic">
         <h style="color: #6bff33; font-size: 30px">SetLOGIC</h>
         <div class="container pt-4" style="border-color:#6bff33;border-width:3px;border-style:solid;padding:5px;">
-            <select id="sel_logic" class="form-control">
+            <select id="sel_logic" class="form-control" disabled="true">
                 <option value="N">一般判斷式</option>
                 <option value="IF">IF判斷式</option>
                 <option value="IE">IF..ELSE判斷式</option>
@@ -98,7 +98,6 @@
             var logicThenRowIndex = 0;
             var logicElseRowIndex = 0;
 
-            alert('123~');
             /******來源區塊*****/
             $('#btnAddSourceRow').on('click', function () {
                 sourceRowIndex++;
@@ -166,7 +165,7 @@
             $('.sourcediv').on('click', '.setSource', function () {
                 if (/*confirm('別名設定後無法變更\n\n請確認！') == true*/1 == 1) {
                     //檢查行為參數是否填寫
-                    let methodTextCheck_ = methodTextCheck($(this));
+                    var methodTextCheck_ = methodTextCheck($(this));
                     if (methodTextCheck_.length >= 1) {
                         alert(methodTextCheck_); return;
                     }
@@ -259,7 +258,7 @@
             $('.conditiondiv').on('click', '.setCondition', function () {
                 if (/*confirm('別名設定後無法變更\n\n請確認！') == true*/1 == 1) {
                     //檢查行為參數是否填寫
-                    let methodTextCheck_ = methodTextCheck($(this));
+                    var methodTextCheck_ = methodTextCheck($(this));
                     if (methodTextCheck_.length >= 1) {
                         alert(methodTextCheck_); return;
                     }
@@ -303,6 +302,9 @@
                         }
                         //更新提示文字到下拉選單
                         $('.selCondition').replaceWith(getCondition);
+                        //trigger change事件，並解鎖下拉選單
+                        //$('#sel_logic').trigger('change');
+                        $('#sel_logic').attr('disabled', false);
                     }
                 } else {
                     return;
@@ -320,8 +322,9 @@
             /******邏輯組合區塊*****/
             /*IF SCOPE*/
             $('#btnGen').on('click', function () {
-                let res = '';
-                let type = $('#sel_logic').val();
+                var res = '';
+                var type = $('#sel_logic').val();
+                var tab = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                 $('#logic_content').empty();
                 res += "路徑查詢邏輯：<br>"
 
@@ -329,25 +332,24 @@
                     $('#tbody_logic').find('tr[id^="oForm_LogicIfRow"]').each(function () {
                         $(this).find('td select').each(function () {
                             if ($(this).hasClass('selCondition')) {
-                                res += $(this).find("option:selected").attr('title') + '<br>';
+                                res += tab + $(this).find("option:selected").attr('title') + '<br>';
                             }
                             else {
-                                res += $(this).find("option:selected").text();
+                                res += tab + $(this).find("option:selected").text() + '<br>';
                             }
                         })
                     })
                     $('#logic_content').append(res);
                 }
                 else if (type == "IF") {
-                    debugger;
                     res += "如果：<br>"
                     $('#tbody_logic').find('tr[id^="oForm_LogicIfRow"]').each(function () {
                         $(this).find('td select').each(function () {
                             if ($(this).hasClass('selCondition')) {
-                                res += $(this).find("option:selected").attr('title') + '<br>';
+                                res += tab + $(this).find("option:selected").attr('title') + '<br>';
                             }
                             else {
-                                res += $(this).find("option:selected").text();
+                                res += tab + $(this).find("option:selected").text() + '<br>';
                             }
                         })
                     })
@@ -355,10 +357,10 @@
                     $('#tbody_logic').find('tr[id^="oForm_LogicThenRow"]').each(function () {
                         $(this).find('td select').each(function () {
                             if ($(this).hasClass('selCondition')) {
-                                res += $(this).find("option:selected").attr('title') + '<br>';
+                                res += tab + $(this).find("option:selected").attr('title') + '<br>';
                             }
                             else {
-                                res += $(this).find("option:selected").text();
+                                res += tab + $(this).find("option:selected").text() + '<br>';
                             }
                         })
                     })
@@ -369,10 +371,10 @@
                     $('#tbody_logic').find('tr[id^="oForm_LogicIfRow"]').each(function () {
                         $(this).find('td select').each(function () {
                             if ($(this).hasClass('selCondition')) {
-                                res += $(this).find("option:selected").attr('title') + '<br>';
+                                res += tab + $(this).find("option:selected").attr('title') + '<br>';
                             }
                             else {
-                                res += $(this).find("option:selected").text();
+                                res += tab + $(this).find("option:selected").text() + '<br>';
                             }
                         })
                     })
@@ -380,10 +382,10 @@
                     $('#tbody_logic').find('tr[id^="oForm_LogicThenRow"]').each(function () {
                         $(this).find('td select').each(function () {
                             if ($(this).hasClass('selCondition')) {
-                                res += $(this).find("option:selected").attr('title') + '<br>';
+                                res += tab + $(this).find("option:selected").attr('title') + '<br>';
                             }
                             else {
-                                res += $(this).find("option:selected").text();
+                                res += tab + $(this).find("option:selected").text() + '<br>';
                             }
                         })
                     })
@@ -391,10 +393,10 @@
                     $('#tbody_logic').find('tr[id^="oForm_LogicElseRow"]').each(function () {
                         $(this).find('td select').each(function () {
                             if ($(this).hasClass('selCondition')) {
-                                res += $(this).find("option:selected").attr('title') + '<br>';
+                                res += tab + $(this).find("option:selected").attr('title') + '<br>';
                             }
                             else {
-                                res += $(this).find("option:selected").text();
+                                res += tab + $(this).find("option:selected").text() + '<br>';
                             }
                         })
                     })
@@ -852,9 +854,9 @@
 
         //規則內容轉為物件後存放至aryRes，供後續使用(組描述文字 or JSON)
         function setSourceConditionObject(type, name) {
-            let arySourceConditiOonbject = [];
-            let obj; 
-            let title = '';
+            var arySourceConditiOonbject = [];
+            var obj; 
+            var title = '';
 
             if (type == "S") {
                 title = '#TBODY_SOURCE_'
@@ -867,7 +869,7 @@
                 obj = new SourceConditionObj();
                 obj.OBJECT_NAME = name;
                 obj.SOURCE_TYPE = type;
-                for (let i = 0; i < aryCondition.length; i++) {
+                for (var i = 0; i < aryCondition.length; i++) {
                     if (aryCondition[i].key == obj.SOURCE) {
                         obj.SOURCE_TYPE = type;
                     }
@@ -941,8 +943,8 @@
         //取得Condition提示字串
         function getConditionObject(name/*Condition Alias*/) {                      
             //sourceString = '';
-            let res = '';
-            let operator = '';
+            var res = '';
+            var operator = '';
 
             for (var i = 0; i < aryRes.length; i++) {
                 if (aryRes[i].name == name) {
@@ -983,11 +985,11 @@
 
         //行為參數檢核
         function methodTextCheck(item) {
-            let res = '';
+            var res = '';
             item.closest('tbody').find('tr').not('head tr').each(function () {
-                let currentRow = $(this)
-                let inputMethod = currentRow.find('select[class*="sel-method"]').val();
-                let inputMethodText = currentRow.find('input[class*="input-methodtext"]').val();
+                var currentRow = $(this)
+                var inputMethod = currentRow.find('select[class*="sel-method"]').val();
+                var inputMethodText = currentRow.find('input[class*="input-methodtext"]').val();
                 if ((inputMethod != "Empty" && inputMethod != "NotEmpty") && inputMethodText.length <= 0) {
                     res = '行為參數必填!!!';
                     return res;
@@ -999,8 +1001,8 @@
 
         //行為下拉選單行為綁定
         function changeMethod(item) {
-            let currentMethod = item.find('select[class*="sel-method"] option:selected');
-            let currentMethodText = item.find('input[class*="input-methodtext"]');
+            var currentMethod = item.find('select[class*="sel-method"] option:selected');
+            var currentMethodText = item.find('input[class*="input-methodtext"]');
             if (currentMethod.val() == "Empty" || currentMethod.val() == "NotEmpty") {
                 currentMethodText.val('');
                 currentMethodText.attr('disabled', true);
