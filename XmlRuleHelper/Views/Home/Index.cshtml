@@ -64,7 +64,12 @@
                 <option value="IE">IF..ELSE判斷式</option>
             </select>
             <div class="col-md-6">
-                <div class="logicdiv table-responsive">
+                <div class="form-group logicdiv table-responsive">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="logic_content" class="form-group logic-content-div table-responsive" style="font-size:24px">
+
                 </div>
             </div>
         </div>
@@ -269,16 +274,23 @@
                             return;
                         }
 
-                        /*新增下拉選單選項*/
-                        var res = updateCondition("A", inputCondition)
-                        if (res.length > 0) {
-                            alert(res);
+                        /*新增Condition下拉選單選項*/
+                        var resCondition = updateCondition("A", inputCondition)
+                        if (resCondition.length > 0) {
+                            alert(ressCondition);
                             return;
                         }
 
-                        //確認別名後，無法再進行異動
-                        $(this).closest('tbody').find('button').attr('disabled', true);
+                        //sel-source要先disabled true，才不會被updateSource()更新下拉選單，把已經選好的來源蓋掉。
                         $(this).closest('tbody').find('select').attr('disabled', true);
+                        /*新增下Source拉選單選項*/
+                        var resSource = updateSource("A", inputCondition)
+                        if (resSource.length > 0) {
+                            alert(resSource);
+                            return;
+                        }
+                        //確認別名後，無法再進行異動
+                        $(this).closest('tbody').find('button').attr('disabled', true);                        
                         $(this).closest('tbody').find('input').attr('disabled', true);
                         //變更<tbody> ID
                         $(this).closest('tr').parent('tbody').attr('id', 'TBODY_CONDITION_' + inputCondition);
@@ -307,6 +319,88 @@
 
             /******邏輯組合區塊*****/
             /*IF SCOPE*/
+            $('#btnGen').on('click', function () {
+                let res = '';
+                let type = $('#sel_logic').val();
+                $('#logic_content').empty();
+                res += "路徑查詢邏輯：<br>"
+
+                if (type == "N") {                    
+                    $('#tbody_logic').find('tr[id^="oForm_LogicIfRow"]').each(function () {
+                        $(this).find('td select').each(function () {
+                            if ($(this).hasClass('selCondition')) {
+                                res += $(this).find("option:selected").attr('title') + '<br>';
+                            }
+                            else {
+                                res += $(this).find("option:selected").text();
+                            }
+                        })
+                    })
+                    $('#logic_content').append(res);
+                }
+                else if (type == "IF") {
+                    debugger;
+                    res += "如果：<br>"
+                    $('#tbody_logic').find('tr[id^="oForm_LogicIfRow"]').each(function () {
+                        $(this).find('td select').each(function () {
+                            if ($(this).hasClass('selCondition')) {
+                                res += $(this).find("option:selected").attr('title') + '<br>';
+                            }
+                            else {
+                                res += $(this).find("option:selected").text();
+                            }
+                        })
+                    })
+                    res += "執行查詢：<br>"
+                    $('#tbody_logic').find('tr[id^="oForm_LogicThenRow"]').each(function () {
+                        $(this).find('td select').each(function () {
+                            if ($(this).hasClass('selCondition')) {
+                                res += $(this).find("option:selected").attr('title') + '<br>';
+                            }
+                            else {
+                                res += $(this).find("option:selected").text();
+                            }
+                        })
+                    })
+                    $('#logic_content').append(res);
+                }
+                else if (type == "IE") {
+                    res += "如果：<br>"
+                    $('#tbody_logic').find('tr[id^="oForm_LogicIfRow"]').each(function () {
+                        $(this).find('td select').each(function () {
+                            if ($(this).hasClass('selCondition')) {
+                                res += $(this).find("option:selected").attr('title') + '<br>';
+                            }
+                            else {
+                                res += $(this).find("option:selected").text();
+                            }
+                        })
+                    })
+                    res += "執行查詢：<br>"
+                    $('#tbody_logic').find('tr[id^="oForm_LogicThenRow"]').each(function () {
+                        $(this).find('td select').each(function () {
+                            if ($(this).hasClass('selCondition')) {
+                                res += $(this).find("option:selected").attr('title') + '<br>';
+                            }
+                            else {
+                                res += $(this).find("option:selected").text();
+                            }
+                        })
+                    })
+                    res += "否則執行查詢：<br>"
+                    $('#tbody_logic').find('tr[id^="oForm_LogicElseRow"]').each(function () {
+                        $(this).find('td select').each(function () {
+                            if ($(this).hasClass('selCondition')) {
+                                res += $(this).find("option:selected").attr('title') + '<br>';
+                            }
+                            else {
+                                res += $(this).find("option:selected").text();
+                            }
+                        })
+                    })
+                    $('#logic_content').append(res);
+                }
+            });
             $('.logicdiv').on('click', '.addif', function () {
                 logicIfRowIndex++;
                 var preTrId = LogicIfRowIdTitle + (logicIfRowIndex - 1)
@@ -393,51 +487,6 @@
                 $(".logicdiv").find('table').remove();
                 $('.logicdiv').append(logicAppend('C'));
             })   
-            $('#btnGen').on('click', function () {
-                var logicType = $('#sel_logic').val();
-                if (logicType == "N") {
-
-                }
-                else if (logicType == "IF") {
-                    $('#tbody_logic').find('tr[id^="oForm_LogicIfRow_"]').each(function () {
-                        $(this).find('td select').each(function () {
-                            if ($(this).hasClass('selCondition')) {
-                                $('#TBODY_CONDITION_' + $(this).val()).find('tr').each(function () {                                 
-                                    $(this).find('td select').each(function () {
-                                        if ($(this).hasClass('sel-operator')) {
-                                            alert($(this).find("option:selected").text());
-                                        }
-                                        if ($(this).hasClass('sel-source')) {                                            
-                                            alert($(this).find("option:selected").text());
-                                        }
-                                        if ($(this).hasClass('sel-node')) {
-                                            alert($(this).find("option:selected").text());
-                                        }
-                                        if ($(this).hasClass('sel-attribute')) {
-                                            alert($(this).find("option:selected").text());
-                                        }
-                                        if ($(this).hasClass('sel-method')) {
-                                            alert($(this).find("option:selected").text());
-                                        }
-                                        if ($(this).hasClass('sel-methodtext')) {
-                                            alert($(this).find("option:selected").text());
-                                        }
-                                    })
-                                })
-                            }
-
-                        })
-                    })
-                    //$('#tbody_logic').find('tr[id^="oForm_LogicThenRow_"]').each(function () {
-                    //    $(this).find('td select').each(function () {
-                    //        alert($(this).val());
-                    //    })
-                    //})
-                }
-                else if (logicType == "IE") {
-
-                }
-            });
 
             $.ajax(
             {
@@ -784,11 +833,12 @@
 
             }
             else if (name == 'node') {
+                //Header(起始元件), Body(中間元件), Sink(末端元件)
                 res = '\
 <select class="form-control sel-node" style="width:auto;">\
     <option value="H">起始元件</option>\
-    <option value="R">中間元件(含Sink)</option>\
-    <option value="R">中間元件(不含Sink)</option>\
+    <option value="BS">中間元件(含Sink)</option>\
+    <option value="B">中間元件(不含Sink)</option>\
     <option value="S">末端元件</option>\
 </select >\
                 ';
@@ -816,12 +866,17 @@
             $(title + name).find('tr').each(function () {  
                 obj = new SourceConditionObj();
                 obj.OBJECT_NAME = name;
-
+                obj.SOURCE_TYPE = type;
+                for (let i = 0; i < aryCondition.length; i++) {
+                    if (aryCondition[i].key == obj.SOURCE) {
+                        obj.SOURCE_TYPE = type;
+                    }
+                }
                 $(this).find('td').each(function () {
                     if ($(this).find('select').hasClass('sel-operator')) {
                         obj.OPERATOR = $(this).find("option:selected").text()
                     }
-                    else if ($(this).find('select').hasClass('sel-source')) {
+                    else if ($(this).find('select').hasClass('sel-source')) {                                               
                         obj.SOURCE = $(this).find("option:selected").text()
                     }
                     else if ($(this).find('select').hasClass('sel-node')) {
@@ -850,44 +905,64 @@
         }
 
         //取得Source提示字串
-        function getSourceObject(name) {
-            var res = '';
-            for (var i = 0; i < aryRes.length; i++) {
-                if (aryRes[i].name == name) {
-                    for (var j = 0; j < aryRes[i].value.length; j++) {
-                        var obj = aryRes[i].value[j];
-                        var element = '';
-                        if (j == 0) {
-                            element = "元件" + obj.ELEMENT + "的";
-                        }
-                        else {
-                            element = obj.ELEMENT;
-                        }
-                        res += obj.OPERATOR + element + obj.ATTRIBUTE + obj.METHOD + obj.METHOD_TEXT + ",";
-                    }
-                }
-            }
-            return res.substring(0, res.length - 1);
-        }
+        //var sourceString = '';
+        //function getSourceObject(name) {
+        //    for (var i = 0; i < aryRes.length; i++) {
+        //        if (aryRes[i].name == name) {
+
+        //            let sign = "  ";
+        //            for (var j = 0; j < aryRes[i].value.length; j++) {
+        //                if (j > 0) {
+        //                    sign = "\r\n  ";
+        //                }
+
+        //                var obj = aryRes[i].value[j];
+        //                if (obj.SOURCE_TYPE == "S") {
+        //                    var element = '';
+        //                    if (j == 0) {
+        //                        element = "元件" + obj.ELEMENT + "的";
+        //                    }
+        //                    else {
+        //                        element = obj.ELEMENT;
+        //                    }
+        //                    sourceString = obj.OPERATOR + element + obj.ATTRIBUTE + obj.METHOD + obj.METHOD_TEXT + ",";
+        //                }
+        //                else {
+        //                    sourceString = obj.OPERATOR + sign + obj.SOURCE + "({" + obj.SOURCE + "})" + obj.NODE + "的" + obj.ATTRIBUTE + obj.METHOD + obj.METHOD_TEXT + ",";
+        //                    sourceString = sourceString.replace("{" + obj.SOURCE + "}", getSourceObject(obj.SOURCE));               
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    return sourceString.substring(0, sourceString.length - 1);
+        //}
 
         //取得Condition提示字串
-        function getConditionObject(name) {
-            var res = '';
+        function getConditionObject(name/*Condition Alias*/) {                      
+            //sourceString = '';
+            let res = '';
+            let operator = '';
+
             for (var i = 0; i < aryRes.length; i++) {
                 if (aryRes[i].name == name) {
                     for (var j = 0; j < aryRes[i].value.length; j++) {
-                        debugger;
                         var obj = aryRes[i].value[j];
-                        res += obj.OPERATOR + "來源:" + obj.SOURCE + "(" + getSourceObject(obj.SOURCE) + ")\r\n" + obj.NODE + "的" + obj.ATTRIBUTE + obj.METHOD + obj.METHOD_TEXT + ",\r\n\r\n";
-                    }
+                        if (j > 0) {
+                            operator = "\r\n" + obj.OPERATOR + "\r\n";
+                        }
+                        else {
+                            operator = obj.OPERATOR;
+                        }
+                        res += operator + obj.SOURCE + obj.NODE + "的" + obj.ATTRIBUTE + obj.METHOD + obj.METHOD_TEXT;
+                    }                  
                 }
             }
-            return res.substring(0, res.length-5);
+            return res;
         }
 
         //特殊字元檢查，別名位當html tag的ID，故不可以用特殊字元
-        function specialCharCheck(strConditions) {
-            debugger;
+        function specialCharCheck(strConditions) {            
             var res = '';
             //var specialKey = "[`~!#$^&;*()=|{}':;',//[//].<>/?~!#￥……&;*()——|{}【】‘;:”“'。,、?]‘'";
             var specialKey = "[`~!#$^&;*()=|{}':;',//[//].<>/?~!#￥……&;*()——|{}【】‘;:”“'。,、?]‘' ";
@@ -937,10 +1012,11 @@
 
         //規則物件CLASS
         class SourceConditionObj {
-            constructor(OBJECT_NAME, OPERATOR, SOURCE, NODE, ELEMENT, ATTRIBUTE, METHOD, METHOD_TEXT) {
+            constructor(OBJECT_NAME, OPERATOR, SOURCE, SOURCE_TYPE, NODE, ELEMENT, ATTRIBUTE, METHOD, METHOD_TEXT) {
                 this.OBJECT_NAME = OBJECT_NAME;
                 this.OPERATOR = !OPERATOR ? "" : OPERATOR;
                 this.SOURCE = !SOURCE ? "" : SOURCE;
+                this.SOURCE_TYPE = !SOURCE_TYPE ? "" : SOURCE_TYPE;
                 this.NODE = !NODE ? "" : NODE;
                 this.ELEMENT = !ELEMENT ? "" : ELEMENT;;
                 this.ATTRIBUTE = !ATTRIBUTE ? "" : ATTRIBUTE;
