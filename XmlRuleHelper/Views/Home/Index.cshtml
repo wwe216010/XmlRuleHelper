@@ -63,11 +63,11 @@
                 <option value="IF">IF判斷式</option>
                 <option value="IE">IF..ELSE判斷式</option>
             </select>
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="form-group logicdiv table-responsive">
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <div id="logic_content" class="form-group logic-content-div table-responsive" style="font-size:24px">
 
                 </div>
@@ -276,7 +276,7 @@
                         /*新增Condition下拉選單選項*/
                         var resCondition = updateCondition("A", inputCondition)
                         if (resCondition.length > 0) {
-                            alert(ressCondition);
+                            alert(resCondition);
                             return;
                         }
 
@@ -297,11 +297,14 @@
                         setSourceConditionObject("C", inputCondition);
                         for (var i = 0; i < aryCondition.length; i++) {
                             if (aryCondition[i].key == inputCondition) {
-                                aryCondition[i].tooltips = getConditionObject(inputCondition);
+                                var tips = getConditionObject(inputCondition);
+                                aryCondition[i].tooltips = tips;
+
+                                //更新Condition到下拉選單
+                                $('.selCondition').append('<option value = "' + inputCondition + '" title = "' + tips + '">' + inputCondition + '</option>');//.replaceWith(getCondition);
                             }
                         }
-                        //更新提示文字到下拉選單
-                        $('.selCondition').replaceWith(getCondition);
+
                         //trigger change事件，並解鎖下拉選單
                         //$('#sel_logic').trigger('change');
                         $('#sel_logic').attr('disabled', false);
@@ -478,11 +481,7 @@
                 setFirstTd(title + '1');
             })
             $('#sel_logic').on('change', function () {
-                if (aryCondition.length <= 0) {
-                    alert('請先設定條件別名!');
-                    return;
-                }
-
+                $('#logic_content').empty();
                 logicIfRowIndex = 0;
                 logicThenRowIndex = 0;
                 logicElseRowIndex = 0;
@@ -637,7 +636,7 @@
                 }
             }
 
-            $('.selCondition').replaceWith(getCondition);
+            //$('.selCondition').replaceWith(getCondition);
             return ''
         }
 
@@ -731,9 +730,9 @@
     <td class="text-center" ><button class="btn btn-success setCondition" type="button">setCondition</button></td >\
     <td class="text-center"><button class="btn btn-danger remove" type="button">-</button></td>\
     <td class="text-center" > <button class="btn btn-info addSubRow" type="button">+</button></td>\
-</tr >\
+</tr>\
 </thead>\
-<tbody>';
+</tbody>';
 
                 return thead + tr
             }
@@ -838,10 +837,10 @@
                 //Header(起始元件), Body(中間元件), Sink(末端元件)
                 res = '\
 <select class="form-control sel-node" style="width:auto;">\
-    <option value="H">起始元件</option>\
-    <option value="BS">中間元件(含Sink)</option>\
-    <option value="B">中間元件(不含Sink)</option>\
-    <option value="S">末端元件</option>\
+    <option value="H">起始節點</option>\
+    <option value="BS">中間節點(含Sink)</option>\
+    <option value="B">中間節點(不含Sink)</option>\
+    <option value="S">末端節點</option>\
 </select >\
                 ';
                 return res;
